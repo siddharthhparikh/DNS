@@ -636,7 +636,7 @@ input:-moz-placeholder {
  ****************/
 .h1 {
   float: center;
-  margin: 25px;
+  margin: 100px 25px 25px 25px;
   color: #FFF;
   font-family: 'Helvetica', sans-serif;
   font-size: 45px;
