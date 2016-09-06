@@ -3,5 +3,14 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery-3.0.0.min.js')
+    script(src='/javascripts/checker.js')
   body
+    #navPanel
+      #logo #{title}
+      #whoAmI
+        a(href='#')
+          span.menu-bar-item Hi! #{username}
+        a(href='/logout')
+          span.menu-bar-item Logout
     block content

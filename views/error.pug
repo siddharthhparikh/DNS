@@ -1,6 +1,23 @@
 extends layout
 
 block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+  .menu-bar
+    a(href='/')
+      span.menu-bar-item.first Home
+    a(href='/buyasset')
+      span.menu-bar-item Purchase an Asset
+    a(href='/tradeasset')
+      span.menu-bar-item Open a Trade
+    a(href='/lookup')
+      span.menu-bar-item Lookup Users/Assets
+    a(href='/myassets')
+      span.menu-bar-item My Assets
+    a(href='/mytrades')
+      span.menu-bar-item My Trades
+    a(href='/myaccount')
+      span.menu-bar-item My Account
   h1= message
-  h2= error.status
+  h3= error.status
   pre #{error.stack}

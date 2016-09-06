@@ -1,8 +1,497 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit; 
 }
 
-a {
-  color: #00B7FF;
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; 
+  padding-bottom: 30px;
+}
+
+ol, ul {
+  list-style: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; 
+}
+
+html {
+  min-height: 100%;
+  min-width: 350px; 
+}
+
+h1 {
+  font-size: 35px;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: normal;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: solid 1px #7E90A0;
+}
+
+h3 {
+  font-size: 20pt;
+  font-weight: normal;
+}
+
+h4 {
+  font-size: 16pt;
+  font-weight: normal;
+}
+
+h5 {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+h6 {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #343D48;
+  margin: 0;
+  color: #fff;
+}
+
+#navPanel {
+  height: 60px;
+  line-height: 60px;
+  width: 100%;
+  background: #eeeeee;
+  font-size: 15px;
+  }
+
+#whoAmI {
+    position: absolute;
+    right: 20px;
+    z-index: 3;
+    top: 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#logo {
+  color: #2b445a;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #eeeeee;
+  position: relative;
+}
+
+.menu-bar {
+  background: #222832;
+  min-height: 50px;
+  /*border-top: #22281E 1px solid;*/
+  /*border-bottom: #22281E 1px solid;*/
+  padding: 0 30px;
+}
+
+#navPanel span.menu-bar-item {
+  text-decoration: none;
+  display: inline-block;
+  padding: 0px 30px;
+  color: #333333;
+  text-align: center;
+}
+
+.menu-bar span.menu-bar-item {
+  text-decoration: none;
+  display: inline-block;
+  padding: 17px 30px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.menu-bar span.menu-bar-item:hover {
+  background-color: #0e1225
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.form-control {
+    display: block;
+    width: 95%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+select.form-control {
+    height: 48px;
+    color: #fff;
+    border: 1px solid #7E90A0;
+    background: #222832;
+}
+
+.container-createaccount, .container {
+  max-width: 600px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.container.large {
+  width: 95%;
+  max-width: 2000px;
+}
+
+.container-stats {
+  width: 31%;
+  min-width: 150px;
+  min-height: 110px;
+  margin: 1%;
+  background: #0e1225;
+  text-align: center;
+  display: inline-table;
+  color: #d4d5e0;
+  padding: 3% 0;
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+.container-stats, .container-stats.first {
+  width: 100%;
+  margin: 10px 0 0 0;
+}
+}
+
+.container-stats .numbers {
+  font-size: 30px;
+  display: block;
+}
+
+input[type="text"], input[type="password"], input[type="number"], input[type="tel"] {
+  color: #fff;
+  border: 1px solid #7E90A0;
+  border-radius: 4px;
+  background-color: #222832;
+}
+
+#CreateAccountResults, #LoginResults, #OpenTradeResults, #ProfileKeysResults, #AssetTableResults, #TradeTableResults, #ProfileResults, #RegisterAssetResults, #LookupUserResults, #LookupAssetResults, #LookupUsersAssetResults {
+  border-left: solid 3px #e2e2e2;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #222832;
+  visibility: hidden;
+  word-wrap: break-word;
+  overflow: auto;
+}
+
+#myAssetTableStats, #myTradesTableStats {
+  padding: 15px 0px;
+}
+
+a.btn {
+  text-decoration: none;
+  color: #333;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.btn:disabled, .btn:disabled:hover {
+  background-color:#c3c3c3;
+  color: #333;
+}
+
+
+.btn:hover {
+  background-color: #222832;
+  color: #fff;
+}
+
+.btn-space {
+  margin: 5px;
+}
+
+tr, td, th {
+  border: 0;
+  padding: 3px;
+  text-align: center; 
+}
+
+table {
+  border-spacing: 0;
+  border: 0;
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+  font-size: 15px; 
+}
+
+tr {
+  margin-bottom: 5px;
+  background: #39424D;
+  border-bottom: 6px #343D48 solid; 
+}
+
+tr:hover {
+  background: orange; 
+}
+
+td {
+  padding: 15px 10px;
+  vertical-align: middle; 
+}
+
+td.action-box {
+    width: 300px;
+}
+
+th {
+  padding: 10px 5px;
+  font-weight: normal;
+  font-size: 12px;
+  background: #343D48;
+  color: #7E90A0;
+  text-align: center;
+  font-weight: bold; 
+}
+
+thead tr {
+  border-top: 1px #646B73 solid;
+  border-bottom: 1px #646B73 solid; 
+}
+
+p {
+  margin: 5px;
+  padding: 0; 
+}
+
+.notification-container {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.notification-box {
+  padding-top: 45px;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+  font-size: 28px;
+  top: 20%;
+  left: 30%;
+  right: 30%;
+  min-height: 150px;
+  width: 40%;
+  background: #ddd;
+  color: #333;
+}
+
+.container-resized-half {
+  width: 50%;
+  vertical-align: top;
+  min-height: 250px;
+  display: inline-block;
+}
+
+.container-resized-half .form-control {
+  width: 75%;
+}
+
+@media (min-width: 720px) {
+.profile-container fieldset {
+  width: 46%;
+  padding: 0px 3% 5px 1%;
+  display: inline-block;
+}
+
+.profile-container .btn {
+  margin-left: 1%;
+}
+}
+
+@media (max-width: 600px) {
+  .container-resized-half {
+    width: 100%;
+    display: block;
+  }
+}
+
+.resultBox .resultBoxTitle {
+  color: #6685ad;
+  font-weight: bold;
+}
+
+.loading-dot,
+.loading-dot2, 
+.loading-dot3,
+.loading-dot4,
+.loading-dot5,
+.loading-dot6, 
+.loading-dot7,
+.loading-dot8,
+.loading-dot9,
+.loading-dot-blockchain,
+.loading-dot-reconnect {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #000000;
+  border-radius: 2px;
+  display: inline-block;
+  margin: 0 5px;
+  -webkit-transform: scale(0);
+          transform: scale(0);
+  -webkit-animation: fx 1000ms ease infinite 0ms;
+          animation: fx 1000ms ease infinite 0ms;
+}
+
+.resultBox .loading-dot, 
+.resultBox .loading-dot2, 
+.resultBox .loading-dot3, 
+.resultBox .loading-dot4,
+.resultBox .loading-dot5, 
+.resultBox .loading-dot6, 
+.resultBox .loading-dot7, 
+.resultBox .loading-dot8,
+.resultBox .loading-dot9,
+.resultBox .loading-dot-reconnect {
+  border: 2px solid #ffffff;
+  width: 5px;
+  height: 5px;
+}
+
+tbody .loading-dot, 
+tbody .loading-dot2, 
+tbody .loading-dot3, 
+tbody .loading-dot4,
+tbody .loading-dot5, 
+tbody .loading-dot6, 
+tbody .loading-dot7, 
+tbody .loading-dot8,
+tbody .loading-dot9,
+tbody .loading-dot-reconnect {
+  border: 2px solid #ffffff;
+  width: 10px;
+  height: 10px;
+}
+
+.container-stats .loading-dot, 
+.container-stats .loading-dot2, 
+.container-stats .loading-dot3, 
+.container-stats .loading-dot4,
+.container-stats .loading-dot5, 
+.container-stats .loading-dot6, 
+.container-stats .loading-dot7, 
+.container-stats .loading-dot8,
+.container-stats .loading-dot9,
+.container-stats .loading-dot-reconnect {
+  border: 2px solid #ffffff;
+  width: 10px;
+  height: 10px;
+}
+
+.loading-dot.second,
+.loading-dot2.second,
+.loading-dot3.second,
+.loading-dot4.second,
+.loading-dot5.second,
+.loading-dot6.second,
+.loading-dot7.second,
+.loading-dot8.second,
+.loading-dot9.second,
+.loading-dot-blockchain.second,
+.loading-dot-reconnect.second {
+  -webkit-animation: fx 1000ms ease infinite 300ms;
+          animation: fx 1000ms ease infinite 300ms;
+}
+
+.loading-dot.third,
+.loading-dot2.third,
+.loading-dot3.third,
+.loading-dot4.third,
+.loading-dot5.third,
+.loading-dot6.third,
+.loading-dot7.third,
+.loading-dot8.third,
+.loading-dot9.third,
+.loading-dot-blockchain.third,
+.loading-dot-reconnect.third {
+  -webkit-animation: fx 1000ms ease infinite 600ms;
+          animation: fx 1000ms ease infinite 600ms;
+}
+
+@-webkit-keyframes fx {
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fx {
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

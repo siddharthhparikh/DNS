@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+  .menu-bar
+    a(href='/')
+      span.menu-bar-item.first Home
+    a(href='/buyasset')
+      span.menu-bar-item Purchase an Asset
+    a(href='/tradeasset')
+      span.menu-bar-item Open a Trade
+    a(href='/lookup')
+      span.menu-bar-item Lookup Users/Assets
+    a(href='/myassets')
+      span.menu-bar-item My Assets
+    a(href='/mytrades')
+      span.menu-bar-item My Trades
+    a(href='/myaccount')
+      span.menu-bar-item My Account
+  .container
+    h2 Welcome Back!
+    form(method="POST" id='loginAccountForm' action="#")
+      label Username:
+      input.form-control(type='text', name='username', placeholder='Enter your Username')
+      label Password:
+      input.form-control(type='password', name='password', placeholder='Enter your Password')
+      input(type='hidden', name='reqtype', value='login')
+      button.btn(type='submit') Login
+    #LoginResults.resultBox
+    h2 Create a Account
+    form(method="POST" id='createAccountForm' action="#")
+      label(for="username") Username:
+      input.form-control(type='text', name='username', placeholder='Enter your Username')
+      input(type='hidden', name='reqtype', value='create')
+      input.btn(type='submit', value='Create Account')
+    #CreateAccountResults.resultBox
