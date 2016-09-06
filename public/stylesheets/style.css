@@ -595,6 +595,41 @@ input:-moz-placeholder {
   color: #888
 }
 
+.menu-list{
+  margin-top: 15px;
+  position: absolute;
+  background: #677798;
+  border-radius: 5px;
+  z-index:10000000000000;
+
+}
+
+.hamburger{
+  background:none;
+  top:0;
+  right:0;
+  line-height:45px;
+  padding:0px 0px 0px 3px;
+  color:#fff;
+  border:0;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  outline:none;
+  z-index:10000000000000;
+  display: none;
+}
+
+@media only screen and (max-width: 700px) {
+  .menu-bar span.menu-bar-item {
+    display: none;
+  }
+  .hamburger {
+    display: inline-block;
+  }
+
+}
+
 
 /****************
  * Pretify demo *

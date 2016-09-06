@@ -44,6 +44,18 @@ function toTitleCase(str) {
 $(document).ready(function () {
     connect();
 
+
+	$(".menu-list").hide();
+	$(".hamburger").click(function () {
+		$(".menu-list").animate({ height: 'toggle', width: 'toggle' }, 'fast');
+	});
+
+	$(document).click(function (event) {
+		if (!$(event.target).is('.menu-list') && !$(event.target).is('.hamburger')) {
+			$('.menu').fadeOut('fast');
+		}
+	});
+
     $("#show-user-publicKey").click(function () {
         sendMessage(JSON.stringify({ fcn: "profile_record", type: "query", args: [sessionUser] }));
         $('#ProfileKeysResults').css("visibility", "visible");
