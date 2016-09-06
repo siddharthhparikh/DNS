@@ -18,59 +18,12 @@ block content
       span.menu-bar-item My Trades
     a(href='/myaccount')
       span.menu-bar-item My Account
-  .container.large
-      h2 Home
-      .container-stats.first
-        #registeredProfilesStats.numbers
-          .loading-dot
-          .loading-dot.second
-          .loading-dot.third
-        p Current # of Registered Profiles
-      .container-stats
-        #registeredAssetsStats.numbers
-          .loading-dot2
-          .loading-dot2.second
-          .loading-dot2.third
-        p Current # of Purchased Assets
-      .container-stats
-        #openAssetTradesStats.numbers
-          .loading-dot3
-          .loading-dot3.second
-          .loading-dot3.third
-        p Current # of Trades Opened
-      .container-stats
-        #closeAssetTradesStats.numbers
-          .loading-dot4
-          .loading-dot4.second
-          .loading-dot4.third
-        p Current # of Trades Closed
-      .container-stats
-        #makeOfferAssetTradesStats.numbers
-          .loading-dot5
-          .loading-dot5.second
-          .loading-dot5.third
-        p Current # of Offers Made
-      .container-stats
-        #acceptedAssetTradesStats.numbers
-          .loading-dot6
-          .loading-dot6.second
-          .loading-dot6.third
-        p Total # of Assets Transfered
-      .container-stats
-        #totalRegisteredAssetsStats.numbers
-          .loading-dot7
-          .loading-dot7.second
-          .loading-dot7.third
-        p Total # of Purchased Assets
-      .container-stats
-        #totalRenewAssetsStats.numbers
-          .loading-dot8
-          .loading-dot8.second
-          .loading-dot8.third
-        p Total # of Renewed Assets
-      .container-stats
-        #totalOpenAssetTradesStats.numbers
-          .loading-dot9
-          .loading-dot9.second
-          .loading-dot9.third
-        p Total # of Trades Opened
+  
+  .h1 Start your domain name search
+  .flexsearch
+  .flexsearch--wrapper
+    form.flexsearch--form(action='#', method='post')
+      .flexsearch--input-wrapper
+        input.flexsearch--input(type='search', placeholder='Type the one you want to get')
+      |  
+      input.flexsearch--submit(type='submit', value='➜')
