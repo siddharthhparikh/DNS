@@ -20,7 +20,7 @@
     "jsrsasign": "^5.0.15",
     "morgan": "~1.7.0",
     "pug": "^2.0.0-beta6",
-    "serve-favicon": "~2.3.0",
+    "serve-favicon": "^2.3.0",
     "session-file-store": "^0.2.1",
     "sjcl": "^1.0.3"
   }
