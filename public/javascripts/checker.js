@@ -52,7 +52,7 @@ $(document).ready(function () {
 
 	$(document).click(function (event) {
 		if (!$(event.target).is('.menu-list') && !$(event.target).is('.hamburger')) {
-			$('.menu').fadeOut('fast');
+			$(".menu-list").animate({ height: 'toggle', width: 'toggle' }, 'fast');
 		}
 	});
 

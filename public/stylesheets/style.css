@@ -514,7 +514,7 @@ tbody .loading-dot-reconnect {
   background: transparent;
   margin: 0;
   position: static;
-  margin: 0px 150px;
+  margin: 0px 15%;
 }
   
 .flexsearch--form {
@@ -529,6 +529,7 @@ tbody .loading-dot-reconnect {
 
 .flexsearch--input {
   width: 100%;
+  
 }
 
 /***********************
