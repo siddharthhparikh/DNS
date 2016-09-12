@@ -20,12 +20,12 @@ var myProfiles;
 router.route("/").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
-      res.render('index', { title: 'Asset Book', username: "" });
+      res.render('index', { title: 'DNS Chain', username: "" });
     } else {
-      res.render('index', { title: 'Asset Book', username: req.session.username });
+      res.render('index', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
-    res.render('index', { title: 'Asset Book', username: "" });
+    res.render('index', { title: 'DNS Chain', username: "" });
   }
 });
 
@@ -34,7 +34,7 @@ router.route("/myaccount").get(function (req, res) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('manageaccount', { title: 'Asset Book', username: req.session.username });
+      res.render('manageaccount', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
     res.redirect('/login');
@@ -46,7 +46,7 @@ router.route("/myassets").get(function (req, res) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('manageassets', { title: 'Asset Book', username: req.session.username });
+      res.render('manageassets', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
     res.redirect('/login');
@@ -58,7 +58,7 @@ router.route("/mytrades").get(function (req, res) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('managetrades', { title: 'Asset Book', username: req.session.username });
+      res.render('managetrades', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
     res.redirect('/login');
@@ -70,7 +70,7 @@ router.route("/tradeasset").get(function (req, res) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('opentrade', { title: 'Asset Book', username: req.session.username, assetName: req.query['asset'] });
+      res.render('opentrade', { title: 'DNS Chain', username: req.session.username, assetName: req.query['asset'] });
     }
   } else {
     res.redirect('/login');
@@ -82,7 +82,7 @@ router.route("/buyasset").get(function (req, res) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('buyasset', { title: 'Asset Book', username: req.session.username });
+      res.render('buyasset', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
     res.redirect('/login');
@@ -90,7 +90,7 @@ router.route("/buyasset").get(function (req, res) {
 });
 
 router.route("/login").get(function (req, res) {
-  res.render('login', { title: 'Asset Book' });
+  res.render('login', { title: 'DNS Chain' });
 });
 
 router.route("/login").post(function (req, res) {
@@ -119,12 +119,12 @@ router.route("/login").post(function (req, res) {
 router.route("/lookup").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
-      res.render('lookup', { title: 'Asset Book', username: "" });
+      res.render('lookup', { title: 'DNS Chain', username: "" });
     } else {
-      res.render('lookup', { title: 'Asset Book', username: req.session.username });
+      res.render('lookup', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
-    res.render('lookup', { title: 'Asset Book', username: "" });
+    res.render('lookup', { title: 'DNS Chain', username: "" });
   }
 });
 
