@@ -8,11 +8,15 @@ html
   body
     #navPanel
       #logo #{title}
+      #login
+      a(href="/login")
+        span.menu-bar-item Login
       #whoAmI
         a(href='#')
           span.menu-bar-item Hi! #{username}
         a(href='/logout')
           span.menu-bar-item Logout
+    
     .menu-bar
       button.hamburger ☰
       span.menu-list
@@ -38,8 +42,8 @@ html
         span.menu-bar-item Open a Trade
       a(href='/search')
         span.menu-bar-item Lookup Users/Assets
-      a(href='/myassets')
-        span.menu-bar-item My Assets
+      a(href='/mydomains')
+        span.menu-bar-item My Domains
       a(href='/mytrades')
         span.menu-bar-item My Trades
       a(href='/myaccount')

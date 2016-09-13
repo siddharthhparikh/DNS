@@ -18,15 +18,7 @@ var myProfiles;
 
 /* GET home page. */
 router.route("/").get(function (req, res) {
-  if (myProfiles) {
-    if (!myProfiles.checkLogin(req.session.username)) {
-      res.render('index', { title: 'DNS Chain', username: "" });
-    } else {
-      res.render('index', { title: 'DNS Chain', username: req.session.username });
-    }
-  } else {
     res.render('index', { title: 'DNS Chain', username: "" });
-  }
 });
 
 router.route("/myaccount").get(function (req, res) {

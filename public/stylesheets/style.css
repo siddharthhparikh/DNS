@@ -97,6 +97,11 @@ body {
     font-size: 13px;
 }
 
+#login {
+  position: absolute;
+  float: right;
+}
+
 #logo {
   color: #2b445a;
   display: inline-block;
