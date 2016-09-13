@@ -135,6 +135,24 @@ body {
   background-color: #0e1225
 }
 
+.menu-bar-link {
+  text-decoration: none;
+}
+#navPanel p.menu-bar-item {
+  text-decoration: none;
+  color: #333333;
+}
+
+.menu-bar p.menu-bar-item {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.menu-bar p.menu-bar-item:hover {
+  background-color: #0e1225;
+  border-radius: 3px;
+}
+
 label {
     display: inline-block;
     max-width: 100%;

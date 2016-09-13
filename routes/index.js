@@ -41,12 +41,12 @@ router.route("/myaccount").get(function (req, res) {
   }
 });
 
-router.route("/myassets").get(function (req, res) {
+router.route("/mydomains").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
     } else {
-      res.render('manageassets', { title: 'DNS Chain', username: req.session.username });
+      res.render('managedomains', { title: 'DNS Chain', username: req.session.username });
     }
   } else {
     res.redirect('/login');
@@ -65,7 +65,7 @@ router.route("/mytrades").get(function (req, res) {
   }
 });
 
-router.route("/tradeasset").get(function (req, res) {
+router.route("/transfer").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
@@ -77,7 +77,7 @@ router.route("/tradeasset").get(function (req, res) {
   }
 });
 
-router.route("/buyasset").get(function (req, res) {
+router.route("/buy").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.redirect('/login');
@@ -116,7 +116,7 @@ router.route("/login").post(function (req, res) {
   }
 });
 
-router.route("/lookup").get(function (req, res) {
+router.route("/search").get(function (req, res) {
   if (myProfiles) {
     if (!myProfiles.checkLogin(req.session.username)) {
       res.render('lookup', { title: 'DNS Chain', username: "" });

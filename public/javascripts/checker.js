@@ -51,7 +51,7 @@ $(document).ready(function () {
 	});
 
 	$(document).click(function (event) {
-		if (!$(event.target).is('.menu-list') && !$(event.target).is('.hamburger')) {
+		if (!$(event.target).is('.menu-list') && !$(event.target).is('.hamburger') && !$(event.target).is('.menu-bar-item') ) {
 			$(".menu-list").animate({ height: 'hide', width: 'hide' }, 'fast');
 		}
 	});
@@ -71,9 +71,9 @@ $(document).ready(function () {
         }
     });
 
-    if (window.location.pathname.toLowerCase() == "/buyasset") {
+    if (window.location.pathname.toLowerCase() == "/buy") {
         $('#registerAssetForm input[name="asset"]').val("A" + Date.now());
-    } else if (window.location.pathname.toLowerCase() == "/tradeasset") {
+    } else if (window.location.pathname.toLowerCase() == "/transfer") {
         $('#openTradeForm input[name="newAssetName"]').val("A" + Date.now())
     }
 
@@ -234,7 +234,7 @@ function connect() {
 
         if (window.location.pathname.toLowerCase() == "/") {
             sendMessage(JSON.stringify({ fcn: "query_stats", type: "query", args: [] }));
-        } else if (window.location.pathname.toLowerCase() == "/myassets" || window.location.pathname.toLowerCase() == "/tradeasset") {
+        } else if (window.location.pathname.toLowerCase() == "/myassets" || window.location.pathname.toLowerCase() == "/transfer") {
             sendMessage(JSON.stringify({ fcn: "user_asset_records", type: "query", args: [sessionUser] }));
         } else if (window.location.pathname.toLowerCase() == "/mytrades") {
             sendMessage(JSON.stringify({ fcn: "user_trade_records", type: "query", args: [sessionUser] }));
@@ -283,7 +283,7 @@ function processMsg(msg) {
             var messageConverted = JSON.parse(bin2String(converted.message.data));
             var assetResults = "";
 
-            if (window.location.pathname.toLowerCase() == "/lookup") {
+            if (window.location.pathname.toLowerCase() == "/search") {
                 $.each(messageConverted, function (index, value) {
                     assetResults = assetResults + "<span class=\"resultBoxTitle\">" + toTitleCase(index) + ":</span> " + value.toString().replace("\n", "") + "<br>";
                 });
@@ -325,7 +325,7 @@ function processMsg(msg) {
                 }
 
                 $('#ProfileKeysResults').html("<span class=\"resultBoxTitle\">Public Key:</span> " + messageConverted.publicKey.replace(/\s\s+/g, ''));
-            } else if (window.location.pathname.toLowerCase() == "/lookup") {
+            } else if (window.location.pathname.toLowerCase() == "/search") {
                 if (converted.message == "error") {
                     $('#LookupUserResults').html(converted.error.msg);
                     $("#lookupUserForm .btn").removeAttr("disabled");
@@ -351,7 +351,7 @@ function processMsg(msg) {
             }
         }
     } else if (converted.fcn == "user_asset_records") {
-        if (window.location.pathname.toLowerCase() == "/tradeasset") {
+        if (window.location.pathname.toLowerCase() == "/transfer") {
             if (isJsonString(bin2String(converted.message.data))) {
                 var messageConverted = JSON.parse(bin2String(converted.message.data));
                 $('#openTradeForm select[name="assetTagList"]').empty();
@@ -362,7 +362,7 @@ function processMsg(msg) {
 
                 $('#openTradeForm select[name="assetTagList"]').val(currentAssetName);
             }
-        } else if (window.location.pathname.toLowerCase() == "/lookup") {
+        } else if (window.location.pathname.toLowerCase() == "/search") {
             if (isJsonString(bin2String(converted.message.data))) {
                 var messageConverted = JSON.parse(bin2String(converted.message.data));
                 var assetResults = "";
@@ -445,7 +445,7 @@ function processMsg(msg) {
                 $("[id^=trade-asset-]").click(function () {
                     if (!tableLocked) {
                         if (confirm("Would you like to trade " + $(this).attr("id").replace("trade-asset-", "").trim() + "?") == true) {
-                            window.location.href = encodeURI("/tradeasset?asset=" + $(this).attr("id").replace("trade-asset-", "").trim());
+                            window.location.href = encodeURI("/transfer?asset=" + $(this).attr("id").replace("trade-asset-", "").trim());
                         }
                     } else {
                         alert("Please wait until the current operation is done.");
@@ -563,7 +563,7 @@ function processMsg(msg) {
         } else if (converted.message == "complete") {
             $("#RegisterAssetResults").text("Your asset is now registered.");
 
-            if (window.location.pathname.toLowerCase() == "/buyasset") {
+            if (window.location.pathname.toLowerCase() == "/buy") {
                 setTimeout(function () {
                     window.location.replace("/myassets");
                 }, 500);
@@ -578,7 +578,7 @@ function processMsg(msg) {
         } else if (converted.message == "complete") {
             $("#OpenTradeResults").text("Your trade is now open.");
 
-            if (window.location.pathname.toLowerCase() == "/tradeasset") {
+            if (window.location.pathname.toLowerCase() == "/transfer") {
                 setTimeout(function () {
                     window.location.replace("/mytrades");
                 }, 500);
