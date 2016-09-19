@@ -37,156 +37,36 @@ import (
 )
 
 // SimpleChaincode example simple Chaincode implementation
-type SimpleAssetChaincode struct {
+type DNSChaincode struct {
 }
 
-type Profile struct {
-	UserID    string `json:"userID"`
-	PublicKey string `json:"publicKey,omitempty"`
-	JsonData  string `json:"jsonData,omitempty"`
-	Assets    string `json:"assets,omitempty"`
-	Credits   string `json:"credits,omitempty"`
+type DomainName struct {
+	userEmail 	string `json:"userEmail"`
+	address 	string `json:"ipAddress"`
 }
 
-type AnOpenTrade struct {
-	UserIDA       string `json:"userIdA,omitempty"`
-	PublicKeyA    string `json:"publicKeyA,omitempty"`
-	AssetName     string `json:"assetName,omitempty"`
-	Status        string `json:"status,omitempty"`
-	UserIDB       string `json:"userIdB,omitempty"`
-	PublicKeyB    string `json:"publicKeyB,omitempty"`
-	CurrentOwner  string `json:"currentOwner,omitempty"`
-	NewAssetName  string `json:"newAssetName,omitempty"`
-	Amount        string `json:"amount,omitempty"`
-	StartingValue string `json:"startingValue,omitempty"`
-	Value         string `json:"value,omitempty"`
-	TimeSpan      string `json:"timeSpan,omitempty"`
-	Signature     string `json:"signature,omitempty"`
+type IPAddress struct {
+	userEmail 	string `json:"userEmail"`
+	domainName 	string `json:"domainName"`
 }
 
-type AssetRecord struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Registered  string `json:"registered,omitempty"`
-	Expires     string `json:"expires,omitempty"`
-	Expired     bool   `json:"expired,omitempty"`
-	TimeSpan    string `json:"timeSpan,omitempty"`
-	LastUpdated string `json:"lastUpdated,omitempty"`
-	Amount      string `json:"amount,omitempty"`
-	Value       string `json:"value,omitempty"`
-	Locked      bool   `json:"locked,omitempty"`
-	PublicKey   string `json:"publicKey,omitempty"`
-	Signature   string `json:"signature,omitempty"`
+type account struct {
+	email 				string 	`json:"email"`
+	registrationDate 	string 	`json:"reg_date"`
+	pubKey 				string 	`json:"pub_key"`
 }
-
-type Stats struct {
-	RegisteredAssets      string `json:"registeredAssets,omitempty"`
-	RegisteredProfiles    string `json:"registeredProfiles,omitempty"`
-	TotalRegisteredAssets string `json:"totalRegisteredAssets,omitempty"`
-	TotalRenewAssets      string `json:"totalRenewAssets,omitempty"`
-	TotalOpenAssetTrades  string `json:"totalOpenAssetTrades,omitempty"`
-	OpenAssetTrades       string `json:"openAssetTrades,omitempty"`
-	AcceptAssetTrades     string `json:"acceptAssetTrades,omitempty"`
-	CloseAssetTrades      string `json:"closeAssetTrades,omitempty"`
-	MakeOfferAssetTrades  string `json:"makeOfferAssetTrades,omitempty"`
-}
-
-// Table Column IDs
-const (
-	ASSET_NAME_COLUMN = iota
-	ASSET_DESCRIPTION_COLUMN
-	ASSET_REGISTERED_COLUMN
-	ASSET_EXPIRES_COLUMN
-	ASSET_TIME_SPAN_COLUMN
-	ASSET_LAST_UPDATED_COLUMN
-	ASSET_AMOUNT_COLUMN
-	ASSET_VALUE_COLUMN
-	ASSET_LOCKED_COLUMN
-	ASSET_PUBLIC_KEY_COLUMN
-	ASSET_SIGNATURE_COLUMN
-)
-
-// Table Column IDs
-const (
-	ASSET_ID_PUBLIC_KEY_COLUMN = iota
-	ASSET_ID_NAME_COLUMN
-	ASSET_ID_DESCRIPTION_COLUMN
-	ASSET_ID_REGISTERED_COLUMN
-	ASSET_ID_EXPIRES_COLUMN
-	ASSET_ID_TIME_SPAN_COLUMN
-	ASSET_ID_LAST_UPDATED_COLUMN
-	ASSET_ID_AMOUNT_COLUMN
-	ASSET_ID_VALUE_COLUMN
-	ASSET_ID_LOCKED_COLUMN
-	ASSET_ID_SIGNATURE_COLUMN
-)
-
-// Table Column IDs
-const (
-	TRADE_USER_ID_A_COLUMN = iota
-	TRADE_PUBLIC_KEY_A_COLUMN
-	TRADE_ASSET_NAME_COLUMN
-	TRADE_STATUS_COLUMN
-	TRADE_USER_ID_B_COLUMN
-	TRADE_PUBLIC_KEY_B_COLUMN
-	TRADE_CURRENT_OWNER_COLUMN
-	TRADE_NEW_ASSET_NAME_COLUMN
-	TRADE_AMOUNT_COLUMN
-	TRADE_STARTING_VALUE_COLUMN
-	TRADE_VALUE_COLUMN
-	TRADE_TIME_SPAN_COLUMN
-	TRADE_SIGNATURE_COLUMN
-)
-
-// Table Column IDs
-const (
-	PROFILE_ID_PUBLIC_KEY_COLUMN = iota
-	PROFILE_ID_USER_ID_COLUMN
-)
-
-// Table Column IDs
-const (
-	PROFILE_USER_ID_COLUMN = iota
-	PROFILE_PUBLIC_KEY_COLUMN
-	PROFILE_JSON_DATA_COLUMN
-	PROFILE_OWNED_ASSETS_COLUMN
-	PROFILE_CREDITS_COLUMN
-)
-
-// Table Names
-const (
-	REGISTERED_ASSETS_TABLE     = "assets"
-	REGISTERED_ASSETS_ID_TABLE  = "assetsIds"
-	REGISTERED_PROFILE_ID_TABLE = "profilesIds"
-	REGISTERED_PROFILE_TABLE    = "profiles"
-	OPEN_TRADE_TABLE            = "trades"
-)
-
-// Stats Names
-const (
-	CURRENT_ASSETS_STATS_NAME         = "registeredAssets"
-	CURRENT_PROFILE_STATS_NAME        = "registeredProfiles"
-	TOTAL_ASSETS_STATS_NAME           = "totalRegisteredAssets"
-	TOTAL_RENEW_ASSETS_STATS_NAME     = "totalRenewAssets"
-	TOTAL_OPEN_ASSET_TRADE_STATS_NAME = "totalOpenAssetTrades"
-	OPEN_ASSET_TRADE_STATS_NAME       = "openAssetTrades"
-	ACCEPTED_ASSET_TRADE_STATS_NAME   = "acceptedAssetTrades"
-	CLOSE_ASSET_TRADE_STATS_NAME      = "closeAssetTrades"
-	MAKE_OFFER_ASSET_TRADE_STATS_NAME = "makeOfferAssetTrades"
-)
-
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
 func main() {
-	err := shim.Start(new(SimpleAssetChaincode))
+	err := shim.Start(new(DNSChaincode))
 	if err != nil {
 		fmt.Printf("Error starting Simple chaincode: %s", err)
 	}
 }
 
 // Init resets all the things
-func (t *SimpleAssetChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	if len(args) != 0 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 0")
 	}
@@ -194,187 +74,264 @@ func (t *SimpleAssetChaincode) Init(stub *shim.ChaincodeStub, function string, a
 	if function == "init" {
 		var err error
 
-		fmt.Println("Creating the asset table by name...")
-		err = stub.CreateTable(REGISTERED_ASSETS_TABLE, []*shim.ColumnDefinition{
-			{"Name", shim.ColumnDefinition_STRING, true},
-			{"Description", shim.ColumnDefinition_STRING, false},
-			{"Registered", shim.ColumnDefinition_STRING, false},
-			{"Expires", shim.ColumnDefinition_STRING, false},
-			{"TimeSpan", shim.ColumnDefinition_STRING, false},
-			{"LastUpdated", shim.ColumnDefinition_STRING, false},
-			{"Amount", shim.ColumnDefinition_STRING, false},
-			{"Value", shim.ColumnDefinition_STRING, false},
-			{"Locked", shim.ColumnDefinition_BOOL, false},
-			{"PublicKey", shim.ColumnDefinition_STRING, false},
-			{"Signature", shim.ColumnDefinition_STRING, false},
+		fmt.Println("Creating the DNS look up table...")
+		err = stub.CreateTable("NameToIP", []*shim.ColumnDefinition{
+			{"domainName", shim.ColumnDefinition_STRING, true},
+			{"ipAddress", shim.ColumnDefinition_STRING, false},
+			{"userEmail", shim.ColumnDefinition_STRING, false},
+			{"DateRegistered", shim.ColumnDefinition_STRING, false},
+			{"Duration", shim.ColumnDefinition_STRING, false},
 		})
 		if err != nil {
 			fmt.Println("Error creating table: ", err)
 		}
 
-		fmt.Println("Creating the asset table by public key...")
-		err = stub.CreateTable(REGISTERED_ASSETS_ID_TABLE, []*shim.ColumnDefinition{
-			{"PublicKey", shim.ColumnDefinition_STRING, true},
-			{"Name", shim.ColumnDefinition_STRING, true},
-			{"Description", shim.ColumnDefinition_STRING, false},
-			{"Registered", shim.ColumnDefinition_STRING, false},
-			{"Expires", shim.ColumnDefinition_STRING, false},
-			{"TimeSpan", shim.ColumnDefinition_STRING, false},
-			{"LastUpdated", shim.ColumnDefinition_STRING, false},
-			{"Amount", shim.ColumnDefinition_STRING, false},
-			{"Value", shim.ColumnDefinition_STRING, false},
-			{"Locked", shim.ColumnDefinition_BOOL, false},
-			{"Signature", shim.ColumnDefinition_STRING, false},
+		fmt.Println("Creating the IP address to Name table...")
+		err = stub.CreateTable("IPToName", []*shim.ColumnDefinition{
+			{"ipAddress", shim.ColumnDefinition_STRING, true},
+			{"domainName", shim.ColumnDefinition_STRING, false},
+			{"userEmail", shim.ColumnDefinition_STRING, false},
+			{"DateRegistered", shim.ColumnDefinition_STRING, false},
+			{"Duration", shim.ColumnDefinition_STRING, false},
 		})
 		if err != nil {
 			fmt.Println("Error creating table: ", err)
 		}
 
-		err = stub.CreateTable(OPEN_TRADE_TABLE, []*shim.ColumnDefinition{
-			{"UserIDA", shim.ColumnDefinition_STRING, false},
-			{"PublicKeyA", shim.ColumnDefinition_STRING, true},
-			{"AssetName", shim.ColumnDefinition_STRING, true},
+		err = stub.CreateTable("TransferRequests", []*shim.ColumnDefinition{
+			{"RequestID", shim.ColumnDefinition_STRING, true}
+			{"Owner", shim.ColumnDefinition_STRING, false},
+			{"Buyer", shim.ColumnDefinition_STRING, false},
+			{"Amount", shim.ColumnDefinition_STRING, false},
 			{"Status", shim.ColumnDefinition_STRING, false},
-			{"UserIDB", shim.ColumnDefinition_STRING, false},
-			{"PublicKeyB", shim.ColumnDefinition_STRING, false},
-			{"CurrentOwner", shim.ColumnDefinition_STRING, false},
-			{"NewAssetName", shim.ColumnDefinition_STRING, false},
-			{"Amount", shim.ColumnDefinition_STRING, false},
-			{"StartingValue", shim.ColumnDefinition_STRING, false},
-			{"Value", shim.ColumnDefinition_STRING, false},
-			{"TimeSpan", shim.ColumnDefinition_STRING, false},
-			{"Signature", shim.ColumnDefinition_STRING, false},
+			{"DateRequested", shim.ColumnDefinition_STRING, false},
+			{"DateDecision", shim.ColumnDefinition_STRING, false},
+			{"BidValue", shim.ColumnDefinition_STRING, false},
 		})
 		if err != nil {
 			fmt.Println("Error creating table: ", err)
 		}
 
-		err = stub.CreateTable(REGISTERED_PROFILE_TABLE, []*shim.ColumnDefinition{
-			{"UserID", shim.ColumnDefinition_STRING, true},
-			{"PublicKey", shim.ColumnDefinition_STRING, false},
-			{"JsonData", shim.ColumnDefinition_BYTES, false},
-			{"OwnedAssets", shim.ColumnDefinition_STRING, false},
-			{"Credits", shim.ColumnDefinition_STRING, false},
+		err = stub.CreateTable("RegisteredUsers", []*shim.ColumnDefinition{
+			{"userEmail", shim.ColumnDefinition_STRING, true},
+			{"PubKey", shim.ColumnDefinition_STRING, false},
+			{"RegistrationDate", shim.ColumnDefinition_STRING, false},
+			{"DomainOwned", shim.ColumnDefinition_STRING, false},
+			{"RequestedBids", shim.ColumnDefinition_STRING, false},
+			{"OwnedBids", shim.ColumnDefinition_STRING, false},
 		})
 		if err != nil {
 			fmt.Println("Error creating table: ", err)
 		}
-
-		err = stub.CreateTable(REGISTERED_PROFILE_ID_TABLE, []*shim.ColumnDefinition{
-			{"PublicKey", shim.ColumnDefinition_STRING, true},
-			{"UserID", shim.ColumnDefinition_STRING, false},
-		})
-		if err != nil {
-			fmt.Println("Error creating table: ", err)
-		}
-
-		err = stub.PutState(CURRENT_ASSETS_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(CURRENT_PROFILE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(TOTAL_ASSETS_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(TOTAL_RENEW_ASSETS_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(TOTAL_OPEN_ASSET_TRADE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(OPEN_ASSET_TRADE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(ACCEPTED_ASSET_TRADE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(CLOSE_ASSET_TRADE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-
-		err = stub.PutState(MAKE_OFFER_ASSET_TRADE_STATS_NAME, []byte(strconv.Itoa(0)))
-		if err != nil {
-			fmt.Println("Error putting state: ", err)
-		}
-	}
 
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) updateStats(stub *shim.ChaincodeStub, statsName string, value int) error {
-	var state []byte
-	var converted int
-	var err error
-
-	state, err = stub.GetState(statsName)
-	if err != nil {
-		return fmt.Errorf("State does not exists: %s", err)
-	}
-
-	converted, err = strconv.Atoi(string(state))
-	if err != nil {
-		return fmt.Errorf("Failed to convert: %s", err)
-	}
-
-	err = stub.PutState(statsName, []byte(strconv.Itoa(converted+value)))
-	if err != nil {
-		return fmt.Errorf("Error putting state: %s", err)
-	}
-
-	return nil
-}
-
 // Invoke is our entry point to invoke a chaincode function
-func (t *SimpleAssetChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
 	if function == "init" {
 		return t.Init(stub, "init", args)
-	} else if function == "profile_init" {
-		return t.profileInit(stub, args)
-	} else if function == "profile_update" {
-		return t.profileUpdateInfo(stub, args)
-	} else if function == "asset_init" {
-		return t.assetInit(stub, args)
-	} else if function == "asset_renew" {
-		return t.assetRenew(stub, args)
-	} else if function == "asset_transfer_init" {
-		return t.assetTransferInit(stub, args)
-	} else if function == "asset_transfer_accept" {
-		return t.assetTransferAcceptChoice(stub, args)
-	} else if function == "asset_transfer_decline" {
-		return t.assetTransferDeclineChoice(stub, args)
-	} else if function == "asset_transfer_cancel" {
-		return t.assetTransferCancelByOwner(stub, args)
-	} else if function == "asset_transfer_make_offer" {
-		return t.assetTransferMakeOffer(stub, args)
-	} else if function == "asset_delete" {
-		return t.assetDelete(stub, args)
+	} else if function == "createAccount" {
+		return t.createAccount(stub, args)
+	} else if function == "registerDomain" {
+		return t.registerDomain(stub, args)
+	} else if function == "transferDomain" {
+		return t.transferDomain(stub, args)
+	} else if function == "placeBid" {
+		return t.placeBid(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + function)
-
 	return nil, errors.New("Received unknown function invocation")
 }
+func (t *DNSChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 
-func (t *SimpleAssetChaincode) profileInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	//args[0] = emailID
+	//args[1] = public key
+	acc := account{email: args[0], registrationDate: time.Now().Format("02 Jan 06 15:04 MST"), pubkey: args[1]} 
+	accountRow, err := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: acc.email}}})
+	if err != nil || len(accountRow.Columns) == 0 {
+		rowAdded, rowErr := stub.InsertRow("RegisteredUsers", shim.Row{
+			Columns: []*shim.Column{
+				&shim.Column{Value: &shim.Column_String_{String_: acc.email}},
+				&shim.Column{Value: &shim.Column_String_{String_: acc.pubkey}},
+				&shim.Column{Value: &shim.Column_String_{String_: acc.registrationDate}},
+				&shim.Column{Value: &shim.Column_String_{String_: ""}},
+				&shim.Column{Value: &shim.Column_String_{String_: ""}},
+				&shim.Column{Value: &shim.Column_String_{String_: ""}},
+			},
+		})
+
+		if rowErr != nil || !rowAdded {
+			return nil, errors.New(fmt.Sprintf("Error creating row: %s", err))
+		}
+	} else {
+		return nil, errors.New("Account already exists. Please login.")
+	}
+}
+func (t *DNSChaincode) registerDomain(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	
+	domainName := args[0]
+	ipAddress := args[1]
+	userEmail := args[2]
+	registrationDate := time.Now().Format("02 Jan 06 15:04 MST")
+	duration := args[3]
+
+	//Update Name to IP lookup table as well as IP to Name. 
+	domainRow, err := stub.GetRow("NameToIP", []shim.Column{{Value: &shim.Column_String_{String_: domainName}}})
+	if err != nil || len(domainRow.Columns) == 0 {
+		rowAdded, rowErr := stub.InsertRow("NameToIP", shim.Row{
+			Columns: []*shim.Column{
+				&shim.Column{Value: &shim.Column_String_{String_: domainName}},
+				&shim.Column{Value: &shim.Column_String_{String_: ipAddress}},
+				&shim.Column{Value: &shim.Column_String_{String_: userEmail}},
+				&shim.Column{Value: &shim.Column_String_{String_: registrationDate}},
+				&shim.Column{Value: &shim.Column_String_{String_: duration}},
+			},
+		})
+
+		if rowErr != nil || !rowAdded {
+			return nil, errors.New(fmt.Sprintf("Error creating row: %s", err))
+		}
+	} else {
+		return nil, errors.New("Domain already exists. Please request a transfer.")
+	}
+
+	ipRow, ipErr := stub.GetRow("IPToName", []shim.Column{{Value: &shim.Column_String_{String_: ipAddress}}})
+	if ipErr != nil || len(ipRow.Columns) == 0 {
+		rowAdded, rowErr := stub.InsertRow("IPToName", shim.Row{
+			Columns: []*shim.Column{
+				{Value: &shim.Column_String_{String_: ipAddress}},
+				{Value: &shim.Column_String_{String_: domainName}},
+				{Value: &shim.Column_String_{String_: userEmail}},
+				{Value: &shim.Column_String_{String_: registrationDate}},
+				{Value: &shim.Column_String_{String_: duration}},
+			},
+		})
+
+		if rowErr != nil || !rowAdded {
+			return nil, errors.New(fmt.Sprintf("Error creating row: %s", err))
+		}
+	} else {
+		return nil, errors.New("IP address is already assigned to another domain name. Please select a new IP address.")
+	}
+
+	accountRow, accountErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
+	
+	if accountErr != nil {
+		return nil, err	
+	} else if len(accountRow.Columns) == 0 {
+		return nil, errors.New("Account does not exists. Not sure how did you get this far but its time to go back and register.")	
+	} else {
+		_, err = stub.ReplaceRow("RegisteredUsers", shim.Row{
+			[]*shim.Column{
+				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
+				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[3].GetString_(),',',domainName)}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[4].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+			},
+		})
+
+		if err != nil {
+			return errors.New(fmt.Sprintf("Error updating row for the profile: %s", err))
+		}
+	}
+}
+func (t *DNSChaincode) getRequestID(stub *shim.ChaincodeStub, args []string) (string, error) {
+	
+	oldOwner := args[1]
+	rowChan, err := stub.GetRows("TransferRequests", []shim.Column{})
+	for chanValue := range rowChan {
+		if(chanValue.Columns[1] == oldOwner) {
+			return chanValue.Columns[0], nil
+		}
+	}
+	return "", errors.New("Could not find request ID. Please check if transfer request is submitted or not")
+}
+
+func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+	domainName := args[0]
+	oldOwner := args[1]
+	newOwner := args[2]
+	newIP := args[3]
+
+	requestID, err := t.getRequestID(stub, args)
+	if err!= nil {
+		return nil, err
+	}
+	
+	transferRow, transferErr := stub.GetRow("TransferRequests", []shim.Column{{Value: &shim.Column_String_{String_: requestID}}})
+	if transferErr != nil || len(transferRow.Columns) == 0 {	
+		_, err = stub.ReplaceRow("TransferRequests", shim.Row{
+			[]*shim.Column{
+				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
+				{Value: &shim.Column_String_{String_: "transfer accepted"}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+				{Value: &shim.Column_String_{String_: time.Now().Format("02 Jan 06 15:04 MST")}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[7].GetString_()}},
+			}
+		})
+		if err != nil {
+			return errors.New(fmt.Sprintf("Error updating row: %s", err))
+		}
+	} else {
+		return nil, errors.New("Transfer ID does not exists. Please check transfer request.")	
+	}
+
+	accountRow, accountErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: oldOwner}}})
+	if accountErr != nil || len(accountRow.Columns) == 0 {
+		return nil, errors.New("Account does not exists. Not sure how did you get this far but its time to go back and register.")	
+	} else {
+			/*
+			{"userEmail", shim.ColumnDefinition_STRING, true},
+			{"PubKey", shim.ColumnDefinition_STRING, false},
+			{"RegistrationDate", shim.ColumnDefinition_STRING, false},
+			{"DomainOwned", shim.ColumnDefinition_STRING, false},
+			{"RequestedBids", shim.ColumnDefinition_STRING, false},
+			{"OwnedBids", shim.ColumnDefinition_STRING, false},
+			*/
+		arr := strings.Split(accountRow.Columns[3].GetString_(), ",")
+		temp := ""
+		for i:=0; i<len(arr); i++ {
+			if(arr[i] != domainName) {
+				strings.Join([]string{temp,',',arr[i]})
+			}
+		}
+
+		arr = strings.Split(accountRow.Columns[4].GetString_(), ",")
+		temp2 := ""
+		for i=0; i<len(arr); i++ {
+			if(arr[i] != requestID) {
+				strings.Join([]string{temp2,',',arr[i]})
+			}
+		}
+
+		_, err = stub.ReplaceRow("RegisteredUsers", shim.Row{
+			[]*shim.Column{
+				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
+				{Value: &shim.Column_String_{String_: temp}},
+				{Value: &shim.Column_String_{String_: temp2}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+			},
+		})
+
+		if err != nil {
+			return errors.New(fmt.Sprintf("Error updating row for the profile: %s", err))
+		}
+	}
+}
+
+func (t *DNSChaincode) profileInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
@@ -431,7 +388,30 @@ func (t *SimpleAssetChaincode) profileInit(stub *shim.ChaincodeStub, args []stri
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) profileUpdateInfo(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) updateStats(stub *shim.ChaincodeStub, statsName string, value int) error {
+	var state []byte
+	var converted int
+	var err error
+
+	state, err = stub.GetState(statsName)
+	if err != nil {
+		return fmt.Errorf("State does not exists: %s", err)
+	}
+
+	converted, err = strconv.Atoi(string(state))
+	if err != nil {
+		return fmt.Errorf("Failed to convert: %s", err)
+	}
+
+	err = stub.PutState(statsName, []byte(strconv.Itoa(converted+value)))
+	if err != nil {
+		return fmt.Errorf("Error putting state: %s", err)
+	}
+
+	return nil
+}
+
+func (t *DNSChaincode) profileUpdateInfo(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 3 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 3")
 	}
@@ -454,7 +434,7 @@ func (t *SimpleAssetChaincode) profileUpdateInfo(stub *shim.ChaincodeStub, args 
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) profileUpdateJson(stub *shim.ChaincodeStub, userKey string, jsonData string) error {
+func (t *DNSChaincode) profileUpdateJson(stub *shim.ChaincodeStub, userKey string, jsonData string) error {
 	var profileIdRow, profileRow shim.Row
 	var err error
 
@@ -483,7 +463,7 @@ func (t *SimpleAssetChaincode) profileUpdateJson(stub *shim.ChaincodeStub, userK
 	return nil
 }
 
-func (t *SimpleAssetChaincode) profileUpdateCredits(stub *shim.ChaincodeStub, userKey string, creditAmount float64) error {
+func (t *DNSChaincode) profileUpdateCredits(stub *shim.ChaincodeStub, userKey string, creditAmount float64) error {
 	var profileIdRow, profileRow shim.Row
 	var convertedTotalCredits float64
 	var err error
@@ -518,7 +498,7 @@ func (t *SimpleAssetChaincode) profileUpdateCredits(stub *shim.ChaincodeStub, us
 	return nil
 }
 
-func (t *SimpleAssetChaincode) profileCheckCredits(stub *shim.ChaincodeStub, userKey string, creditAmount float64) error {
+func (t *DNSChaincode) profileCheckCredits(stub *shim.ChaincodeStub, userKey string, creditAmount float64) error {
 	var profileIdRow, profileRow shim.Row
 	var err error
 
@@ -544,12 +524,7 @@ func (t *SimpleAssetChaincode) profileCheckCredits(stub *shim.ChaincodeStub, use
 	return errors.New("Insufficient funds")
 }
 
-const (
-	PROFILE_ASSETS_ADD = iota
-	PROFILE_ASSETS_DELETE
-)
-
-func (t *SimpleAssetChaincode) profileUpdateAssets(stub *shim.ChaincodeStub, userKey string, assetName string, assetAction int) error {
+func (t *DNSChaincode) profileUpdateAssets(stub *shim.ChaincodeStub, userKey string, assetName string, assetAction int) error {
 	var profileIdRow, profileRow shim.Row
 	var err error
 
@@ -597,7 +572,7 @@ func (t *SimpleAssetChaincode) profileUpdateAssets(stub *shim.ChaincodeStub, use
 	return nil
 }
 
-func (t *SimpleAssetChaincode) assetInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 9 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 9")
 	}
@@ -736,7 +711,7 @@ const (
 	ASSET_TRANSFER_WAIT_FOR_NEW_OWNER = "waitfornewowner"
 )
 
-func (t *SimpleAssetChaincode) assetTransferInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferInit(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 6 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 6")
 	}
@@ -851,7 +826,7 @@ func (t *SimpleAssetChaincode) assetTransferInit(stub *shim.ChaincodeStub, args 
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferAcceptChoice(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferAcceptChoice(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var assetRow, tradeRow shim.Row
 	var err error
 
@@ -887,7 +862,7 @@ func (t *SimpleAssetChaincode) assetTransferAcceptChoice(stub *shim.ChaincodeStu
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferDeclineChoice(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferDeclineChoice(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var assetRow, tradeRow shim.Row
 	var err error
 
@@ -922,7 +897,7 @@ func (t *SimpleAssetChaincode) assetTransferDeclineChoice(stub *shim.ChaincodeSt
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferAcceptByNewOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferAcceptByNewOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -1029,7 +1004,7 @@ func (t *SimpleAssetChaincode) assetTransferAcceptByNewOwner(stub *shim.Chaincod
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferDeclineByNewOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferDeclineByNewOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 3 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -1094,7 +1069,7 @@ func (t *SimpleAssetChaincode) assetTransferDeclineByNewOwner(stub *shim.Chainco
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferAcceptByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferAcceptByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if !t.checkAssetOwnership(stub, args[0], args[1], "", args, false) {
 		return nil, errors.New("Invalid ownership")
 	}
@@ -1160,7 +1135,7 @@ func (t *SimpleAssetChaincode) assetTransferAcceptByOwner(stub *shim.ChaincodeSt
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferDeclineByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferDeclineByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if !t.checkAssetOwnership(stub, args[0], args[1], "", args, false) {
 		return nil, errors.New("Invalid ownership")
 	}
@@ -1226,7 +1201,7 @@ func (t *SimpleAssetChaincode) assetTransferDeclineByOwner(stub *shim.ChaincodeS
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferCancelByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferCancelByOwner(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 2 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2")
 	}
@@ -1292,7 +1267,7 @@ func (t *SimpleAssetChaincode) assetTransferCancelByOwner(stub *shim.ChaincodeSt
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetTransferMakeOffer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetTransferMakeOffer(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
@@ -1367,7 +1342,7 @@ func (t *SimpleAssetChaincode) assetTransferMakeOffer(stub *shim.ChaincodeStub, 
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetUpdateOwner(stub *shim.ChaincodeStub, assetName string, publicKey string, signature string, assetCost float64) error {
+func (t *DNSChaincode) assetUpdateOwner(stub *shim.ChaincodeStub, assetName string, publicKey string, signature string, assetCost float64) error {
 	var assetsRow shim.Row
 	var rowAdded bool
 	var err error
@@ -1441,7 +1416,7 @@ func (t *SimpleAssetChaincode) assetUpdateOwner(stub *shim.ChaincodeStub, assetN
 	return nil
 }
 
-func (t *SimpleAssetChaincode) assetSplitOwner(stub *shim.ChaincodeStub, assetName string, newAssetName string, publicKey string, signature string, convertedTradeAmount int, convertedAssetAmount int, assetCost float64) error {
+func (t *DNSChaincode) assetSplitOwner(stub *shim.ChaincodeStub, assetName string, newAssetName string, publicKey string, signature string, convertedTradeAmount int, convertedAssetAmount int, assetCost float64) error {
 	var assetsRow shim.Row
 	var rowAdded bool
 	var err error
@@ -1541,7 +1516,7 @@ func (t *SimpleAssetChaincode) assetSplitOwner(stub *shim.ChaincodeStub, assetNa
 	return nil
 }
 
-func (t *SimpleAssetChaincode) assetUpdateLock(stub *shim.ChaincodeStub, assetName string, newLockStatus bool) error {
+func (t *DNSChaincode) assetUpdateLock(stub *shim.ChaincodeStub, assetName string, newLockStatus bool) error {
 	var assetsRow shim.Row
 	var err error
 
@@ -1592,7 +1567,7 @@ func (t *SimpleAssetChaincode) assetUpdateLock(stub *shim.ChaincodeStub, assetNa
 	return nil
 }
 
-func (t *SimpleAssetChaincode) assetRenew(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetRenew(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 6 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 6")
 	}
@@ -1748,7 +1723,7 @@ func (t *SimpleAssetChaincode) assetRenew(stub *shim.ChaincodeStub, args []strin
 	return nil, nil
 }
 
-func (t *SimpleAssetChaincode) assetDelete(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
+func (t *DNSChaincode) assetDelete(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
@@ -1837,70 +1812,71 @@ func (t *SimpleAssetChaincode) assetDelete(stub *shim.ChaincodeStub, args []stri
 }
 
 // Query is our entry point for queries
-func (t *SimpleAssetChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 
 	// Handle different functions
-	if function == "query_stats" || function == "user_trade_records" || function == "user_asset_records" || function == "asset_record" || function == "profile_record" {
-		return t.queryForStruct(stub, function, args)
-	}
+	switch(function) {
 
-	fmt.Println("query did not find func: " + function)
-
-	return nil, errors.New("Received unknown function query")
-}
-
-func (t *SimpleAssetChaincode) queryForStruct(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	var data interface{}
-	var r_err error
-
-	if function == "query_stats" {
+	case "AllRegisteredDomains":
 		if len(args) != 0 {
 			return nil, errors.New("Incorrect number of arguments. Expecting 0")
 		}
 
-		data, r_err = t.convertToStats(stub, args)
+		data, r_err = t.getDomains(stub, args)
 		if r_err != nil {
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
-	} else if function == "profile_record" {
+		break
+
+	case "IPToName":
 		if len(args) != 1 {
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
 
-		data, r_err = t.convertToProfile(stub, args)
+		data, r_err = t.getIPToName(stub, args)
 		if r_err != nil {
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
-	} else if function == "asset_record" {
+		break
+
+	case "NameToIP":
 		if len(args) != 1 {
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
 
-		data, r_err = t.convertToAssetRecord(stub, args)
+		data, r_err = t.getNameToIP(stub, args)
 		if r_err != nil {
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
-	} else if function == "user_asset_records" {
+		break
+
+	case "UserBids":
+		if len(args) != 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getUserBids(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+		break
+
+	case "ReceivedBids":
 		if len(args) < 1 {
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
 
-		data, r_err = t.convertToUserAssetRecord(stub, args)
+		data, r_err = t.getReceivedBids(stub, args)
 		if r_err != nil {
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
-	} else if function == "user_trade_records" {
-		if len(args) < 1 {
-			return nil, errors.New("Incorrect number of arguments. Expecting 1")
-		}
+		break
 
-		data, r_err = t.convertToTrades(stub, args)
-		if r_err != nil {
-			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
-		}
+	case default:
+		fmt.Println("query did not find func: " + function)
+		return nil, errors.New("Received unknown function query")
 	}
-
 	var converted []byte
 	var converted_err error
 
@@ -1912,12 +1888,7 @@ func (t *SimpleAssetChaincode) queryForStruct(stub *shim.ChaincodeStub, function
 	return converted, nil
 }
 
-type AssetRecordList struct {
-	AssetList      []AssetRecord `json:"assets"`
-	ProfileCredits string        `json:"credits"`
-}
-
-func (t *SimpleAssetChaincode) convertToUserAssetRecord(stub *shim.ChaincodeStub, args []string) (AssetRecordList, error) {
+func (t *DNSChaincode) convertToUserAssetRecord(stub *shim.ChaincodeStub, args []string) (AssetRecordList, error) {
 	if len(args) != 1 {
 		return AssetRecordList{}, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -1984,7 +1955,7 @@ func (t *SimpleAssetChaincode) convertToUserAssetRecord(stub *shim.ChaincodeStub
 	return AssetRecordList{AssetList: assetRecords, ProfileCredits: t.readStringSafe(row.Columns[PROFILE_CREDITS_COLUMN])}, nil
 }
 
-func (t *SimpleAssetChaincode) convertToAssetRecord(stub *shim.ChaincodeStub, args []string) (AssetRecord, error) {
+func (t *DNSChaincode) convertToAssetRecord(stub *shim.ChaincodeStub, args []string) (AssetRecord, error) {
 	if len(args) != 1 {
 		return AssetRecord{}, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -2030,7 +2001,7 @@ type TradesRecordList struct {
 	ProfileCredits string        `json:"credits"`
 }
 
-func (t *SimpleAssetChaincode) convertToTrades(stub *shim.ChaincodeStub, args []string) (TradesRecordList, error) {
+func (t *DNSChaincode) convertToTrades(stub *shim.ChaincodeStub, args []string) (TradesRecordList, error) {
 	row, r_err := stub.GetRow(REGISTERED_PROFILE_TABLE, []shim.Column{{Value: &shim.Column_String_{String_: strings.TrimSpace(args[0])}}})
 	if r_err != nil || len(row.Columns) == 0 {
 		return TradesRecordList{}, fmt.Errorf("Failed to get state for " + args[0])
@@ -2076,7 +2047,7 @@ func (t *SimpleAssetChaincode) convertToTrades(stub *shim.ChaincodeStub, args []
 	return TradesRecordList{TradesList: tradeRecords, ProfileCredits: t.readStringSafe(row.Columns[PROFILE_CREDITS_COLUMN])}, nil
 }
 
-func (t *SimpleAssetChaincode) convertToProfile(stub *shim.ChaincodeStub, args []string) (Profile, error) {
+func (t *DNSChaincode) convertToProfile(stub *shim.ChaincodeStub, args []string) (Profile, error) {
 	if len(args) != 1 {
 		return Profile{}, errors.New("Incorrect number of arguments. Expecting 1")
 	}
@@ -2105,7 +2076,7 @@ func (t *SimpleAssetChaincode) convertToProfile(stub *shim.ChaincodeStub, args [
 	}, nil
 }
 
-func (t *SimpleAssetChaincode) convertToStats(stub *shim.ChaincodeStub, args []string) (Stats, error) {
+func (t *DNSChaincode) convertToStats(stub *shim.ChaincodeStub, args []string) (Stats, error) {
 	if len(args) != 0 {
 		return Stats{}, errors.New("Incorrect number of arguments. Expecting 0")
 	}
@@ -2171,7 +2142,7 @@ func (t *SimpleAssetChaincode) convertToStats(stub *shim.ChaincodeStub, args []s
 	}, nil
 }
 
-func (t *SimpleAssetChaincode) readBytesSafe(col *shim.Column) []byte {
+func (t *DNSChaincode) readBytesSafe(col *shim.Column) []byte {
 	if col == nil {
 		return []byte("")
 	}
@@ -2179,7 +2150,7 @@ func (t *SimpleAssetChaincode) readBytesSafe(col *shim.Column) []byte {
 	return col.GetBytes()
 }
 
-func (t *SimpleAssetChaincode) readStringSafe(col *shim.Column) string {
+func (t *DNSChaincode) readStringSafe(col *shim.Column) string {
 	if col == nil {
 		return ""
 	}
@@ -2187,7 +2158,7 @@ func (t *SimpleAssetChaincode) readStringSafe(col *shim.Column) string {
 	return col.GetString_()
 }
 
-func (t *SimpleAssetChaincode) readInt32Safe(col *shim.Column) int32 {
+func (t *DNSChaincode) readInt32Safe(col *shim.Column) int32 {
 	if col == nil {
 		return 0
 	}
@@ -2195,7 +2166,7 @@ func (t *SimpleAssetChaincode) readInt32Safe(col *shim.Column) int32 {
 	return col.GetInt32()
 }
 
-func (t *SimpleAssetChaincode) readBoolSafe(col *shim.Column) bool {
+func (t *DNSChaincode) readBoolSafe(col *shim.Column) bool {
 	if col == nil {
 		return false
 	}
@@ -2203,7 +2174,7 @@ func (t *SimpleAssetChaincode) readBoolSafe(col *shim.Column) bool {
 	return col.GetBool()
 }
 
-func (t *SimpleAssetChaincode) checkAssetOwnership(stub *shim.ChaincodeStub, assetName string, ownerSignature string, ownerPublicKey string, args []string, useKeyFromArgs bool) bool {
+func (t *DNSChaincode) checkAssetOwnership(stub *shim.ChaincodeStub, assetName string, ownerSignature string, ownerPublicKey string, args []string, useKeyFromArgs bool) bool {
 	var token string = ""
 	for index := 0; index < len(args); index++ {
 		if index != 1 {
@@ -2250,7 +2221,7 @@ func (r *rsaPublicKey) Unsign(message []byte, sig []byte) error {
 	return rsa.VerifyPKCS1v15(r.PublicKey, crypto.SHA256, d, sig)
 }
 
-func (t *SimpleAssetChaincode) newUnsignerFromKey(k interface{}) (Unsigner, error) {
+func (t *DNSChaincode) newUnsignerFromKey(k interface{}) (Unsigner, error) {
 	var sshKey Unsigner
 	switch t := k.(type) {
 	case *rsa.PublicKey:
@@ -2265,7 +2236,7 @@ type rsaPublicKey struct {
 	*rsa.PublicKey
 }
 
-func (t *SimpleAssetChaincode) parsePublicKey(pemBytes []byte) (Unsigner, error) {
+func (t *DNSChaincode) parsePublicKey(pemBytes []byte) (Unsigner, error) {
 	block, _ := pem.Decode(pemBytes)
 	if block == nil {
 		return nil, errors.New("ssh: no key found")
