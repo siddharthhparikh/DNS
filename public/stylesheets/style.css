@@ -27,23 +27,6 @@ body{
     @include background-image(linear-gradient(0deg, rgba(0,0,0,.2),rgba(0,0,0,.2)),url($blurred-img));
   }
 }
-<<<<<<< HEAD
-.box{
-  width:500px;
-  height:300px;
-  left:-webkit-calc( 50% - 250px );
-  top:20%;
-  position:absolute;
-  border-radius:5px;
-  @include box-shadow(0 20px 30px rgba(0,0,0,.6));
-  border:1px solid rgba(255,255,255,.3);
-  padding:20px;
-  text-align: center;
-  @include box-sizing(border-box);
-  text-shadow:0 1px 1px rgba(0,0,0,.4);
-  display: flex;
-  transition: box-shadow .3s ease;
-=======
 
 @keyframes fx {
   50% {
@@ -76,7 +59,6 @@ body{
   position: static;
   margin: 0px 150px;
 }
->>>>>>> f2b652e85df52f9da93a108feeef37b2a29c4181
   
   &:active{
     cursor:move;
@@ -113,7 +95,6 @@ p{
     }
   }
 }
-
 
 /****************
  * Pretify demo *
