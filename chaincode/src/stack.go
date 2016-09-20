@@ -20,13 +20,13 @@ Contributors:
 package main
 
 import (
-	//"crypto"
-	//"crypto/rsa"
-	//"crypto/sha256"
-	//"crypto/x509"
-	//"encoding/hex"
+	"crypto"
+	"crypto/rsa"
+	"crypto/sha256"
+	"crypto/x509"
+	"encoding/hex"
 	//"encoding/json"
-	//"encoding/pem"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	//"strconv"
@@ -128,9 +128,84 @@ func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []st
 	return nil, nil
 }
 
+func (t *DNSChaincode) getUserPubKey(stub *shim.ChaincodeStub, args []string) (string) {
+	userEmail := args[0]
+	accountRow, accountErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
+	if accountErr != nil {
+		return ""	
+	} else if len(accountRow.Columns) == 0 {
+		return ""	
+	} else {
+		return accountRow.Columns[1].GetString_()
+	}
+}
+
+type Unsigner interface {
+	Unsign(data []byte, sig []byte) error
+}
+
+func (r *rsaPublicKey) Unsign(message []byte, sig []byte) error {
+	h := sha256.New()
+	h.Write(message)
+	d := h.Sum(nil)
+	return rsa.VerifyPKCS1v15(r.PublicKey, crypto.SHA256, d, sig)
+}
+
+func (t *DNSChaincode) newUnsignerFromKey(k interface{}) (Unsigner, error) {
+	var sshKey Unsigner
+	switch t := k.(type) {
+	case *rsa.PublicKey:
+		sshKey = &rsaPublicKey{t}
+	default:
+		return nil, fmt.Errorf("ssh: unsupported key type %T", k)
+	}
+	return sshKey, nil
+}
+
+type rsaPublicKey struct {
+	*rsa.PublicKey
+}
+
+func (t *DNSChaincode) parsePublicKey(pemBytes []byte) (Unsigner, error) {
+	block, _ := pem.Decode(pemBytes)
+	if block == nil {
+		return nil, errors.New("ssh: no key found")
+	}
+
+	var rawkey interface{}
+	switch block.Type {
+	case "PUBLIC KEY":
+		rsa, err := x509.ParsePKIXPublicKey(block.Bytes)
+		if err != nil {
+			return nil, err
+		}
+
+		rawkey = rsa
+	default:
+		return nil, fmt.Errorf("ssh: unsupported key type %q", block.Type)
+	}
+
+	return t.newUnsignerFromKey(rawkey)
+}
+
+func (t *DNSChaincode) checkUserPrivKey(stub *shim.ChaincodeStub, args []string) (bool) {
+	//pubKey := t.getUserPubKey(stub,args)
+	//signature := []byte(args[1])
+	signByte, _ := hex.DecodeString(args[1])
+	pubByte, _ := hex.DecodeString(t.getUserPubKey(stub,args))
+	key, keyError := t.parsePublicKey(pubByte)
+	if keyError == nil {
+		return key.Unsign([]byte(args[0]), signByte) == nil
+	}
+	return false
+}
 // Invoke is our entry point to invoke a chaincode function
 func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
+
+	if t.checkUserPrivKey(stub,args) == false {
+		return nil, errors.New("Signed by wrong private key. I can smell something fishy")
+	}
 
 	// Handle different functions
 	if function == "init" {
@@ -200,9 +275,9 @@ func (t *DNSChaincode) getUniqueID(stub *shim.ChaincodeStub, i int) (string, err
 }
 func (t *DNSChaincode) placeBid(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	fromBid := args[0]
-	toBid := args[1]
-	domainName := args[2]
-	amount := args[3]
+	toBid := args[2]
+	domainName := args[3]
+	amount := args[4]
 
 	transectionID, err := t.getUniqueID(stub, 10) //try 10 times to generate a random ID
 	if err!=nil {
@@ -280,8 +355,8 @@ func (t *DNSChaincode) placeBid(stub *shim.ChaincodeStub, args []string) ([]byte
 func (t *DNSChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 
 	//args[0] = emailID
-	//args[1] = public key
-	acc := account{email: args[0], registrationDate: time.Now().Format("02 Jan 06 15:04 MST"), pubKey: args[1]} 
+	//args[2] = public key
+	acc := account{email: args[0], registrationDate: time.Now().Format("02 Jan 06 15:04 MST"), pubKey: args[2]} 
 	accountRow, err := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: acc.email}}})
 	if err != nil || len(accountRow.Columns) == 0 {
 		rowAdded, rowErr := stub.InsertRow("RegisteredUsers", shim.Row{
@@ -306,11 +381,11 @@ func (t *DNSChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([
 }
 func (t *DNSChaincode) registerDomain(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	
-	domainName := args[0]
-	ipAddress := args[1]
-	userEmail := args[2]
+	userEmail := args[0]
+	domainName := args[2]
+	ipAddress := args[3]
 	registrationDate := time.Now().Format("02 Jan 06 15:04 MST")
-	duration := args[3]
+	duration := args[4]
 
 	//Update Name to IP lookup table as well as IP to Name. 
 	domainRow, err := stub.GetRow("NameToIP", []shim.Column{{Value: &shim.Column_String_{String_: domainName}}})
@@ -378,7 +453,7 @@ func (t *DNSChaincode) registerDomain(stub *shim.ChaincodeStub, args []string) (
 }
 func (t *DNSChaincode) getRequestID(stub *shim.ChaincodeStub, args []string) (string, error) {
 	
-	oldOwner := args[1]
+	oldOwner := args[0]
 	rowChan, err := stub.GetRows("TransferRequests", []shim.Column{})
 	if err!=nil {
 		return "", err
@@ -392,10 +467,11 @@ func (t *DNSChaincode) getRequestID(stub *shim.ChaincodeStub, args []string) (st
 }
 
 func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
-	domainName := args[0]
-	oldOwner := args[1]
-	newOwner := args[2]
-	newIP := args[3]
+	
+	oldOwner := args[0]
+	domainName := args[2]
+	newOwner := args[3]
+	newIP := args[4]
 
 	requestID, err := t.getRequestID(stub, args)
 	if err!= nil {

@@ -1,11 +1,24 @@
-#box1.box.blurred-bg.tinted
-  link(rel='stylesheet', href='/stylesheets/style.css')
-  .content
-    h1 Blurred Background
-    h2
-      | By 
-      a(href='http://ariona.net', rel='follow', target='_blank') Ariona, Rian
-    p Drag this box to move around
-    p.related
-      | See also: 
-      a(href='http://codepen.io/ariona/details/LVZLGP/', target='_blank') Staged Dropdown Animation
+#nav
+  ul
+    li
+      a(href='#about') About
+    li
+      a(href='#portfolio') Portfolio
+    li
+      a(href='#contact') Contact
+
+link(rel='stylesheet', href='/stylesheets/style.css')
+script(src='/javascripts/jquery-3.0.0.min.js')
+script(src='/javascripts/checker.js')
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+script(src='https://github.com/kswedberg/jquery-smooth-scroll/blob/master/jquery.smooth-scroll.min.js')
+
+#page1
+  a#about.smooth
+  |     About page content goes here.
+#page2
+  a#portfolio.smooth
+  |     Portfolio page content goes here.
+#page3
+  a#contact.smooth
+  |     Contact page content goes here.
