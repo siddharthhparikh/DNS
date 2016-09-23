@@ -47,7 +47,10 @@ router.post('/login', function (req, res, next) {
     }
   });
 });
+router.post('/search', function (req, res, next) {
+  res.end('{"status" : "success", "type": "manager", "data": "success"}')
 
+});
 router.get('/get-account', function (req, res) {
   var args = [];
   args.push(req.session.name);

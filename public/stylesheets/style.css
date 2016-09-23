@@ -1,111 +1,112 @@
-@import "compass/css3";
-
-@import url(http://fonts.googleapis.com/css?family=Raleway:100,400,700);
-
-$normal-img:"https://lh4.googleusercontent.com/-3eBjuQpOGFw/U47yh_-OycI/AAAAAAAAI2U/uaU5pK49N1w/s1600/normal.jpg";
-$blurred-img:"https://lh3.googleusercontent.com/-m8TxQMObg6c/U474EWu7Y9I/AAAAAAAAI2k/xkRGoIEC1iU/s1600/blur.jpg";
-
-body{
-  background-image:url($normal-img);
-  background-repeat:no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-
-  font-family:Raleway, Open Sans, Droid Sans, Roboto,arial, sans-serif;
-}
-.blurred-bg{
-
-  background-image:url($blurred-img);
-  background-repeat:no-repeat;
-  @include background-size(cover);
-  background-attachment: fixed;
-   
-  &.tinted{
-    @include background-image(linear-gradient(0deg, rgba(255,255,255,.2),rgba(255,255,255,.2)),url($blurred-img));
-  }
-  &.shaded{
-    @include background-image(linear-gradient(0deg, rgba(0,0,0,.2),rgba(0,0,0,.2)),url($blurred-img));
-  }
+.fixed-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 50px;
+  background-color: #00a087;
 }
 
-@keyframes fx {
-  50% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
+/* The element at the top of the page right after the fixed navigation bar
+   MUST have sufficient top margin or else it will be covered by the bar */
+.content {
+  margin-top: 20px;
+}
+
+/* Example responsive navigation menu  */
+.fixed-nav-bar li, .fixed-nav-bar a { 
+  height: 50px;
+  line-height: 50px;
+}
+.menu {
+  width: 90%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.menu a, .menu a:visited {
+  color: #ffffff;
+}
+.menu a:hover, .menu a:target {
+  color: #ebebeb;
+}
+.menu-items {
+  display: inline-block;
+}
+.sitename {
+  display: inline-block;
+  margin-right: 20px;
+  margin-left: 10px;
+}
+a.sitename, a:visited.sitename {
+  color: #e0e0e0;
+}
+.menu-items li {
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.menu-items a {
+  text-decoration: none;
+}
+.show, .hide {
+  display: none;
+  padding-left: 15px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center left;
+  color: #dde1e2;
+}
+.show {
+  background-image: url(assets/down-arrow-icon.png);
+}
+.hide {
+  background-image: url(assets/up-arrow-icon.png);
+}
+
+@media only screen and (max-width: 800px) {
+  .menu { 
+    position: relative;
+    width: 100%;
   }
-  100% {
-    opacity: 0;
+  .sitename {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    margin-left: 0px;
+  }
+  .menu-items {
+    display: none; 
+    width: 100%;
+    margin-top: 50px;
+    background-color: #008378;
+  }
+  .menu-items li {
+    display: block;
+    text-align: center;
+  }
+  .show, .hide {  
+    position: absolute;
+    top: 0;
+    right: 15px;
+  }
+  .show {
+    display: inline-block;
+  }
+  .hide {
+    display: none;
+  }
+  #menu:target .show {
+    display: none;
+  }
+  #menu:target .hide, #menu:target .menu-items {
+    display: inline-block;
   }
 }
 
-
-
-
-/* Sid added this jack needs to edit it */
-
-@import "compass/css3";
-
-/***********************
- * Essential Structure *
- ***********************/
-.flexsearch--wrapper {
-  height: auto;
-  width: auto;
-  max-width: 100%;
-  overflow: hidden;
-  background: transparent;
-  margin: 0;
-  position: static;
-  margin: 0px 150px;
-}
-  
-  &:active{
-    cursor:move;
-    @include box-shadow(0 20px 50px rgba(0,0,0,.9));
+@media only screen and (max-width: 220px) {
+  .sitename, .show, .hide {
+    font-size: 14px;
   }
-  
-  .content{
-    margin: auto;
-  }
-}
-h1,h2,a,p{
-  color:white;
-  font-weight:100;
-  
-  .tinted &{
-    color:black;
-    text-shadow:0 1px 1px rgba(255,255,255,.2);
-  }
-}
-h2{ font-size: 14px }
-p{ 
-  margin: 20px;
-  &.related{
-    text-transform: uppercase;
-    font-weight: 700;
-    color: #444;
-    
-    a{
-      font-weight: 700;
-      text-decoration: none;
-      &:hover{
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-/****************
- * Pretify demo *
- ****************/
-.h1 {
-  float: center;
-  margin: 100px 25px 25px 25px;
-  color: #FFF;
-  font-family: 'Helvetica', sans-serif;
-  font-size: 45px;
-  font-weight: bold;
-  line-height: 45px;
-  text-align: center;
 }

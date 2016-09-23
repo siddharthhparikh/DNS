@@ -33,7 +33,8 @@ import (
 	"strings"
 	"time"
 	"math/rand"
-
+	"encoding/json"
+	
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -220,15 +221,155 @@ func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []
 		return t.placeBid(stub, args)
 	}
 
-	fmt.Println("invoke did not find func: " + function)
+	fmt.Println("invoke did not find function: " + function)
 	return nil, errors.New("Received unknown function invocation")
 }
+func (t *DNSChaincode) checkAccount(stub *shim.ChaincodeStub, args []string) (bool, error) {
+	return t.checkUserPrivKey(stub,args), nil
+}
+func (t *DNSChaincode) getDomainName(stub *shim.ChaincodeStub, args []string) (string, error) {
+	ipAddress := args[0]
+	ipRow, ipErr := stub.GetRow("IPToName", []shim.Column{{Value: &shim.Column_String_{String_: ipAddress}}})
+	if ipErr != nil || len(ipRow.Columns) == 0 {
+		return "", errors.New("Error occurred in getting Domain name. Probably IP address is not assigned to any Domain")
+	} else {
+		return ipRow.Columns[1].GetString_(), nil
+	}
+}
+func (t *DNSChaincode) getIPAddress(stub *shim.ChaincodeStub, args []string) (string, error) {
+	domainName := args[0]
+	domainRow, domainErr := stub.GetRow("NameToIP", []shim.Column{{Value: &shim.Column_String_{String_: domainName}}})
+	if domainErr != nil || len(domainRow.Columns) == 0 {
+		return "", errors.New("Error occurred in getting IP Address. Probably domain name is not registered")
+	} else {
+		return domainRow.Columns[1].GetString_(), nil
+	}
+}
+func (t *DNSChaincode) getOwnedDomains(stub *shim.ChaincodeStub, args []string) (string, error) {
+	userEmail := args[0]
+	if !t.checkUserPrivKey(stub,args) {
+		return "",errors.New("User private key can not be verified")
+	}
+	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
+	if userErr != nil || len(userRow.Columns) == 0 {
+		return "", errors.New("Error occurred in getting Account. Account Does not exist")
+	} else {
+		return userRow.Columns[3].GetString_(), nil
+	}
+}
+func (t *DNSChaincode) getOwnedBids(stub *shim.ChaincodeStub, args []string) (string, error) {
+	userEmail := args[0]
+	if !t.checkUserPrivKey(stub,args) {
+		return "",errors.New("User private key can not be verified")
+	}
+	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
+	if userErr != nil || len(userRow.Columns) == 0 {
+		return "", errors.New("Error occurred in getting Account. Account Does not exist")
+	} else {
+		return userRow.Columns[5].GetString_(), nil
+	}
+}
+func (t *DNSChaincode) getTransferRequests(stub *shim.ChaincodeStub, args []string) (string, error) {
+	userEmail := args[0]
+	if !t.checkUserPrivKey(stub,args) {
+		return "",errors.New("User private key can not be verified")
+	}
+	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
+	if userErr != nil || len(userRow.Columns) == 0 {
+		return "", errors.New("Error occurred in getting Account. Account Does not exist")
+	} else {
+		return userRow.Columns[4].GetString_(), nil
+	}
+}
 
+//Complete Get stats function. Now its not important
+func (t *DNSChaincode) getStats(stub *shim.ChaincodeStub, args []string) (string, error) {
+	//userRow, userErr := stub.GetRows("RegisteredUsers", []shim.Column{})
+	stats := "test"
+	return stats, nil
+}
 func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 
+	var data interface{}
+	var r_err error
 
-	fmt.Println("query did not find func: " + function)
-	return nil, errors.New("Received unknown function query")
+	if function == "query_stats" {
+		if len(args) != 0 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
+
+		data, r_err = t.getStats(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "checkAccount" {
+		if len(args) != 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.checkAccount(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "getDomainName" {
+		if len(args) != 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getDomainName(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "getIPAddress" {
+		if len(args) < 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getIPAddress(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "getOwnedDomains" {
+		if len(args) < 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getOwnedDomains(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "getOwnedBids" {
+		if len(args) < 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getOwnedBids(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else if function == "getTransferRequests" {
+		if len(args) < 1 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		}
+
+		data, r_err = t.getTransferRequests(stub, args)
+		if r_err != nil {
+			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+	} else {
+		fmt.Println("query did not find function: " + function)
+		return nil, errors.New("Received unknown function query")
+	}
+
+	var converted []byte
+	var converted_err error
+
+	converted, converted_err = json.Marshal(data)
+	if converted_err != nil {
+		return nil, errors.New("{\"error\":\"" + converted_err.Error() + "\"}")
+	}
+
+	return converted, nil
 }
 
 func generateRandomNumber() string {

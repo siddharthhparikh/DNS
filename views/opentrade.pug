@@ -3,34 +3,3 @@ extends layout
 block content
   script(type='text/javascript').
     setAuth("#{username}");
-    setCurrentAssetName("#{assetName}");
-  .menu-bar
-    a(href='/')
-      span.menu-bar-item.first Home
-    a(href='/buyasset')
-      span.menu-bar-item Purchase an Asset
-    a(href='/tradeasset')
-      span.menu-bar-item Open a Trade
-    a(href='/lookup')
-      span.menu-bar-item Lookup Users/Assets
-    a(href='/myassets')
-      span.menu-bar-item My Assets
-    a(href='/mytrades')
-      span.menu-bar-item My Trades
-    a(href='/myaccount')
-      span.menu-bar-item My Account
-  .container.large
-    .open-trade-container
-      h2 Open a Trade
-      form(method='post', id='openTradeForm', action='#')
-       label(for="assetTagList") Asset:
-       select.form-control(name='assetTagList', required='')
-       label(for="newOwnerUsername") New Owner`s Username:
-       input.form-control(type='text', name='newOwnerUsername', placeholder='Enter the Username of the New Owner', required='')
-       label(for="tradeValue") Trade Value (In dollars):
-       input.form-control(type='number', name='tradeValue', placeholder='Enter the Value of the Trade (Ex. 10.00)', required='')
-       label(for="tradeAmount") Trade Quantity:
-       input.form-control(type='number', name='tradeAmount', placeholder='Enter the Quantity of the Trade (Ex. 1)', required='')
-       input.form-control(type='hidden', name='newAssetName')
-       input.btn(type='submit', value='Open Trade')
-      #OpenTradeResults.resultBox
