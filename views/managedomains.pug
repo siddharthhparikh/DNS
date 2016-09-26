@@ -1,3 +1,15 @@
 extends layout
 
 block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+
+  .container
+    h2 Domains
+    table.dtble
+      tr
+        th Domain Name
+        th IP Address
+      tr
+        td www.example.com
+        td 192.168.0.1

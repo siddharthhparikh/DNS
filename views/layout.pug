@@ -4,18 +4,17 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/javascripts/jquery-3.0.0.min.js')
+    script(src='https://github.com/kswedberg/jquery-smooth-scroll/blob/master/jquery.smooth-scroll.min.js')
     script(src='/javascripts/checker.js')
   body
     #navPanel
       #logo #{title}
       #login
-      a(href="/login")
+      a#logintop(href="/login")
         span.menu-bar-item Login
-      #whoAmI
-        a(href='#')
-          span.menu-bar-item Hi! #{username}
-        a(href='/logout')
-          span.menu-bar-item Logout
+      a#regtop(href='/register')
+        span.menu-bar-item Register
+      
     
     .menu-bar
       button.hamburger ☰
@@ -23,11 +22,11 @@ html
         a.menu-bar-link(href='/')
           p.menu-bar-item.first Home
         a.menu-bar-link(href='/buy')
-          p.menu-bar-item Purchase an Asset
+          p.menu-bar-item Purchase a Domain
         a.menu-bar-link(href='/transfer')
           p.menu-bar-item Open a Trade
         a.menu-bar-link(href='/search')
-          p.menu-bar-item Lookup Users/Assets
+          p.menu-bar-item Search
         a.menu-bar-link(href='/mydomains')
           p.menu-bar-item My Domains
         a.menu-bar-link(href='/mytrades')
@@ -37,16 +36,16 @@ html
       a(href='/')
         span.menu-bar-item.first Home
       a(href='/buy')
-        span.menu-bar-item Purchase an Asset
+        span.menu-bar-item Purchase a Domain
       a(href='/transfer')
         span.menu-bar-item Open a Trade
       a(href='/search')
-        span.menu-bar-item Lookup Users/Assets
-      a(href='/mydomains')
+        span.menu-bar-item Search
+      a(href='#mydomains')
         span.menu-bar-item My Domains
       a(href='/mytrades')
         span.menu-bar-item My Trades
-      a(href='/myaccount')
+      a(href='#myaccount')
         span.menu-bar-item My Account
   
     block content

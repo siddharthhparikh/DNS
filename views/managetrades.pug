@@ -4,23 +4,6 @@ block content
   script(type='text/javascript').
     setAuth("#{username}");
 
-  .container.large
-    .trades-list-container
-      h2 My Trades
-      #myTradesTableStats
-      table#myTradesTable
-        thead
-          tr 
-            th Name
-            th User
-            th Status
-            th Quantity
-            th Value
-            th Actions
-        tbody
-          tr
-            td(colspan='6')
-              .loading-dot2
-              .loading-dot2.second
-              .loading-dot2.third
-      #TradeTableResults.resultBox
+  .container
+    h2 Trades
+    

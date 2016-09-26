@@ -3,21 +3,17 @@ extends layout
 block content
   script(type='text/javascript').
     setAuth("#{username}");
-  
+    $('#logintop').hide();
+
+
   .container
-    h2 Welcome Back!
-    form(method="POST" id='loginAccountForm' action="#")
-      label Username:
-      input.form-control(type='text', name='username', placeholder='Enter your Username')
-      label Password:
-      input.form-control(type='password', name='password', placeholder='Enter your Password')
-      input(type='hidden', name='reqtype', value='login')
-      button.btn(type='submit') Login
-    #LoginResults.resultBox
-    h2 Create a Account
-    form(method="POST" id='createAccountForm' action="#")
-      label(for="username") Username:
-      input.form-control(type='text', name='username', placeholder='Enter your Username')
-      input(type='hidden', name='reqtype', value='create')
-      input.btn(type='submit', value='Create Account')
-    #CreateAccountResults.resultBox
+    h2 Welcome
+    form(method='POST' id='loginAccountForm' action='#')
+        label Username:
+        input.form-control(type='text' name='username' placeholder='Enter Username' autofocus)
+        label Password:
+        input.form-control(type='password' name='password' placeholder='Enter Password')
+        button.btn(type='submit') Login
+        a.btn(href='/register' style='float: right; color: black') Register
+        span.needAccount Need a new account?
+        

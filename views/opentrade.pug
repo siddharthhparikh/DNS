@@ -3,20 +3,7 @@ extends layout
 block content
   script(type='text/javascript').
     setAuth("#{username}");
-    setCurrentAssetName("#{assetName}");
 
-  .container.large
-    .open-trade-container
-      h2 Open a Trade
-      form(method='post', id='openTradeForm', action='#')
-       label(for="assetTagList") Asset:
-       select.form-control(name='assetTagList', required='')
-       label(for="newOwnerUsername") New Owner`s Username:
-       input.form-control(type='text', name='newOwnerUsername', placeholder='Enter the Username of the New Owner', required='')
-       label(for="tradeValue") Trade Value (In dollars):
-       input.form-control(type='number', name='tradeValue', placeholder='Enter the Value of the Trade (Ex. 10.00)', required='')
-       label(for="tradeAmount") Trade Quantity:
-       input.form-control(type='number', name='tradeAmount', placeholder='Enter the Quantity of the Trade (Ex. 1)', required='')
-       input.form-control(type='hidden', name='newAssetName')
-       input.btn(type='submit', value='Open Trade')
-      #OpenTradeResults.resultBox
+
+  .container
+    h2 Open Trade
