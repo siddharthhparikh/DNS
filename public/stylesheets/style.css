@@ -708,6 +708,9 @@ input:-moz-placeholder {
   .hamburger {
     display: inline-block;
   }
+  .scroller{
+    display: none;
+  }
 
 }
 
