@@ -45,10 +45,19 @@ $(document).ready(function () {
     connect();
 
 
+
+
 	$(".menu-list").hide();
 	$(".hamburger").click(function () {
 		$(".menu-list").animate({ height: 'toggle', width: 'toggle' }, 'fast');
 	});
+
+    $(".scroller").click(function() {
+        var id = $('.scroller').val();
+        $('html, body').animate({
+            scrollTop: $(id).offset().top
+        }, 2000);
+    });
 
 	$(document).click(function (event) {
 		if (!$(event.target).is('.menu-list') && !$(event.target).is('.hamburger') && !$(event.target).is('.menu-bar-item') ) {
