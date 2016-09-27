@@ -27,7 +27,7 @@ router.route('/mytrades').get(function(req, res) {
 });
 
 router.route('/search').get(function(req, res) {
-  res.render('search', { title: 'DNS Search'});
+  res.render('search', { title: 'DNS Search', search: req.body.lookup});
 });
 
 router.route('/transfer').get(function(req, res) {
