@@ -1,0 +1,46 @@
+extends layout
+
+block content
+    script(type='text/javascript').
+        setAuth("#{username}");
+        $('#logintop').hide();
+
+    script(src='https://github.com/kswedberg/jquery-smooth-scroll/blob/master/jquery.smooth-scroll.min.js')
+   
+   
+
+    div.container(id='page1' style='height: 1000px')
+        
+        .h1 Domain Search
+        .flexsearch
+        .flexsearch--wrapper
+        form.flexsearch--form(action='lookup', method='post')
+            .flexsearch--input-wrapper
+                input.flexsearch--input(type='search', placeholder='www.example.com')
+            |  
+            input.flexsearch--submit(type='submit', value='➜')
+
+
+       
+        .h1 User Search
+        .flexsearch
+        .flexsearch--wrapper
+        form.flexsearch--form(action='#', method='post')
+            .flexsearch--input-wrapper
+                input.flexsearch--input(type='search', placeholder='i.e. Siddarth Parikh')
+            |  
+            input.flexsearch--submit(type='submit', value='➜')
+    div.container( style='height: 1000px')
+        li.smooth(id='mydomains')
+            h2 Manage Domains
+            table.dtble
+                tr
+                    th Domain Name
+                    th IP Address
+                tr
+                    td www.example.com
+                    td 192.168.0.1
+        
+    div.container( style='height: 1000px')
+        li.smooth(id='myaccount')
+            h2 Manage Account

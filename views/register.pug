@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    script.
+        $('#regtop').hide();
+
+    .container
+        h2 Register
+        form(method='POST' id='loginAccountForm' action='#')
+            label Email:
+            input.form-control(type='text' name='email' placeholder='Enter email address' autofocus)
+            label Username:
+            input.form-control(type='text' name='username' placeholder='Enter Username')
+            a.btn(href='/keys' target='_blank' style='color: black; width: 95%; margin-bottom: 15px;') Generate Keys
+            label Password:
+            input.form-control(type='password' name='password' placeholder='Enter Password')
+            input.form-control(type='password' name='passwordCheck' placeholder='Re-enter Password')
+            button.btn(type='submit') Register
+            a.btn(href='/login' style='float: right; color: black') Sign in
+            span.needAccount Already have an account?

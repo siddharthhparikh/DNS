@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+ 
+  .container.large
+    .container-lookup
+      h2 Lookup an User
+      form(method='post', id='lookupUserForm', action='#')
+        label(for="username") Username:
+        input.form-control(type='text', name='username', placeholder='Enter an Username')
+        input.btn(type='submit', value='Lookup')
+      #LookupUserResults.resultBox
+    .container-lookup
+      h2 Lookup an Asset
+      form(method='post', id='lookupAssetForm', action='#')
+        label(for="asset") Asset Tag:
+        input.form-control(type='text', name='asset', placeholder='Enter an Asset Tag')
+        input.btn(type='submit', value='Lookup')
+      #LookupAssetResults.resultBox
+    .container-lookup
+      h2 Lookup Assets by User
+      form(method='post', id='lookupAssetUsersForm', action='#')
+        label(for="username") Username:
+        input.form-control(type='text', name='username', placeholder='Enter an Username')
+        input.btn(type='submit', value='Lookup')
+      #LookupUsersAssetResults.resultBox

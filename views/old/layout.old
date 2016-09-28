@@ -1,0 +1,52 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery-3.0.0.min.js')
+    script(src='/javascripts/checker.js')
+  body
+    #navPanel
+      #logo #{title}
+      #login
+      a(href="/login")
+        span.menu-bar-item Login
+      #whoAmI
+        a(href='#')
+          span.menu-bar-item Hi! #{username}
+        a(href='/logout')
+          span.menu-bar-item Logout
+    
+    .menu-bar
+      button.hamburger ☰
+      span.menu-list
+        a.menu-bar-link(href='/')
+          p.menu-bar-item.first Home
+        a.menu-bar-link(href='/buy')
+          p.menu-bar-item Purchase an Asset
+        a.menu-bar-link(href='/transfer')
+          p.menu-bar-item Open a Trade
+        a.menu-bar-link(href='/search')
+          p.menu-bar-item Search
+        a.menu-bar-link(href='/mydomains')
+          p.menu-bar-item My Domains
+        a.menu-bar-link(href='/mytrades')
+          p.menu-bar-item My Trades
+        a.menu-bar-link(href='/myaccount')
+          p.menu-bar-item My Account
+      a(href='/')
+        span.menu-bar-item.first Home
+      a(href='/buy')
+        span.menu-bar-item Purchase an Asset
+      a(href='/transfer')
+        span.menu-bar-item Open a Trade
+      a(href='/search')
+        span.menu-bar-item Search
+      a(href='/mydomains')
+        span.menu-bar-item My Domains
+      a(href='/mytrades')
+        span.menu-bar-item My Trades
+      a(href='/myaccount')
+        span.menu-bar-item My Account
+  
+    block content

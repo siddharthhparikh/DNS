@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+  
+  .h1 Domain Search
+  .flexsearch
+  .flexsearch--wrapper
+    form.flexsearch--form(action='#', method='post')
+      .flexsearch--input-wrapper
+        input.flexsearch--input(type='search', placeholder='www.example.com')
+      |  
+      input.flexsearch--submit(type='submit', value='➜')

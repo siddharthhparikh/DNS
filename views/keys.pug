@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+    $('#logintop').hide();
+
+  .container
+    h2 Key Generation
+    button.btn2(style='width: 46%') Public Key
+    button.btn2(style='width: 46%') Private Key
+    br
+    button.btn2(onclick="javascript:window.open('','_self').close();" style='width: 96%') Back to Register

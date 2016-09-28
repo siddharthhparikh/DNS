@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+
+  h1= message
+  h3= error.status
+  pre #{error.stack}
