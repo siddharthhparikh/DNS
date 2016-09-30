@@ -117,7 +117,6 @@ body {
   min-height: 50px;
   /*border-top: #22281E 1px solid;*/
   /*border-bottom: #22281E 1px solid;*/
-  padding: 0 30px;
 }
 
 #navPanel span.menu-bar-item {
@@ -249,7 +248,6 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
 
 .scroller {
     display: inline-block;
-    padding: 6px 12px;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.42857143;
@@ -261,8 +259,15 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    border-radius: 4px;
-    background-color: #333;
+    background: #222832;
+    border: none;
+   
+}
+
+.scroller:hover {
+  background-color: #0e1225;
+  border-radius: 3px;
+
 }
 
 a.btn {
@@ -299,6 +304,7 @@ a.btn {
   background-color: #222832;
   color: #fff;
 }
+
 
 .btn-space {
   margin: 5px;
