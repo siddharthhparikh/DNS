@@ -25,19 +25,285 @@
   max-width: 960px;
   margin: 0 auto;
 }
-.menu a, .menu a:visited {
-  color: #ffffff;
+#login {
+  position: absolute;
+  float: right;
 }
-.menu a:hover, .menu a:target {
-  color: #ebebeb;
+
+#logo {
+  color: #2b445a;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #eeeeee;
+  position: relative;
+}
+
+.menu-bar {
+  background: #222832;
+  min-height: 50px;
+  /*border-top: #22281E 1px solid;*/
+  /*border-bottom: #22281E 1px solid;*/
 }
 .menu-items {
   display: inline-block;
 }
 .sitename {
   display: inline-block;
-  margin-right: 20px;
-  margin-left: 10px;
+  padding: 17px 30px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.menu-bar span.menu-bar-item:hover {
+  background-color: #0e1225
+}
+
+.menu-bar-link {
+  text-decoration: none;
+}
+#navPanel p.menu-bar-item {
+  text-decoration: none;
+  color: #333333;
+}
+
+.menu-bar p.menu-bar-item {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.menu-bar p.menu-bar-item:hover {
+  background-color: #0e1225;
+  border-radius: 3px;
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.form-control {
+    display: block;
+    width: 95%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+select.form-control {
+    height: 48px;
+    color: #fff;
+    border: 1px solid #7E90A0;
+    background: #222832;
+}
+
+.container-createaccount, .container {
+  max-width: 600px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.container.large {
+  width: 95%;
+  max-width: 2000px;
+}
+
+.container-stats {
+  width: 31%;
+  min-width: 150px;
+  min-height: 110px;
+  margin: 1%;
+  background: #0e1225;
+  text-align: center;
+  display: inline-table;
+  color: #d4d5e0;
+  padding: 3% 0;
+  font-size: 20px;
+}
+
+@media (max-width: 600px) {
+.container-stats, .container-stats.first {
+  width: 100%;
+  margin: 10px 0 0 0;
+}
+}
+
+.container-stats .numbers {
+  font-size: 30px;
+  display: block;
+}
+
+input[type="text"], input[type="password"], input[type="number"], input[type="tel"] {
+  color: #fff;
+  border: 1px solid #7E90A0;
+  border-radius: 4px;
+  background-color: #222832;
+}
+
+#CreateAccountResults, #LoginResults, #OpenTradeResults, #ProfileKeysResults, #AssetTableResults, #TradeTableResults, #ProfileResults, #RegisterAssetResults, #LookupUserResults, #LookupAssetResults, #LookupUsersAssetResults {
+  border-left: solid 3px #e2e2e2;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #222832;
+  visibility: hidden;
+  word-wrap: break-word;
+  overflow: auto;
+}
+
+#myAssetTableStats, #myTradesTableStats {
+  padding: 15px 0px;
+}
+
+.scroller {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #222832;
+    border: none;
+   
+}
+
+.scroller:hover {
+  background-color: #0e1225;
+  border-radius: 3px;
+
+}
+
+a.btn {
+  text-decoration: none;
+  color: #333;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.btn:disabled, .btn:disabled:hover {
+  background-color:#c3c3c3;
+  color: #333;
+}
+
+
+.btn:hover {
+  background-color: #222832;
+  color: #fff;
+}
+
+
+.btn-space {
+  margin: 5px;
+}
+
+
+
+
+a.btn2 {
+  text-decoration: none;
+  color: #333;
+}
+ 
+.btn2 {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    margin: 2%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.btn2:disabled, .btn2:disabled:hover {
+  background-color:#c3c3c3;
+  color: #333;
+}
+
+
+.btn2:hover {
+  background-color: #222832;
+  color: #fff;
+}
+
+.btn2-space {
+  margin: 5px;
+}
+
+
+
+tr, td, th {
+  border: 0;
+  padding: 3px;
+  text-align: center; 
+}
+
+table {
+  border-spacing: 0;
+  border: 0;
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+  font-size: 15px; 
+}
+
+tr {
+  margin-bottom: 5px;
+  background: #39424D;
+  border-bottom: 6px #343D48 solid; 
+}
+
+tr:hover {
+  background: orange; 
+}
+
+td {
+  padding: 15px 10px;
+  vertical-align: middle; 
 }
 a.sitename, a:visited.sitename {
   color: #e0e0e0;
@@ -94,7 +360,147 @@ a.sitename, a:visited.sitename {
   .show {
     display: inline-block;
   }
-  .hide {
+}
+
+
+
+
+/* Sid added this jack needs to edit it */
+
+@import "compass/css3";
+
+/***********************
+ * Essential Structure *
+ ***********************/
+.flexsearch--wrapper {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  overflow: hidden;
+  background: transparent;
+  margin: 0;
+  position: static;
+  margin: 0px 15%;
+}
+  
+.flexsearch--form {
+  overflow: hidden;
+  position: relative;
+}
+  
+.flexsearch--input-wrapper {
+  padding: 0 66px 0 0; /* Right padding for submit button width */
+  overflow: hidden;
+}
+
+.flexsearch--input {
+  width: 100%;
+  
+}
+
+/***********************
+ * Configurable Styles *
+ ***********************/
+.flexsearch {
+  padding: 0 25px 0 200px; /* Padding for other horizontal elements */
+}
+
+.flexsearch--input {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 60px;
+  padding: 0 46px 0 10px;
+  border-color: #888;
+  border-radius: 35px; /* (height/2) + border-width */
+  border-style: solid;
+  border-width: 5px;
+  margin-top: 15px;
+  color: #333;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 26px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+  
+.flexsearch--submit {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: none;
+  margin-top: 20px; /* margin-top + border-width */
+  margin-right: 5px; /* border-width */
+  background: transparent;
+  color: #888;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 40px;
+  line-height: 60px;
+}
+
+.flexsearch--input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.flexsearch--input:focus.flexsearch--submit {
+  color: #333; 
+}
+
+.flexsearch--submit:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+::-webkit-input-placeholder {
+  color: #888;  
+}
+
+input:-moz-placeholder {
+  color: #888
+}
+
+.menu-list{
+  margin-top: 15px;
+  position: absolute;
+  background: #677798;
+  border-radius: 5px;
+  z-index:10000000000000;
+
+}
+
+.hamburger{
+  background:none;
+  top:0;
+  right:0;
+  line-height:45px;
+  padding:0px 0px 0px 3px;
+  color:#fff;
+  border:0;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  outline:none;
+  z-index:10000000000000;
+  display: none;
+}
+
+.needAccount{
+  float: right; 
+  padding-right: 10px; 
+  padding-top: 10px;
+}
+
+@media only screen and (max-width: 565px) {
+  .needAccount{
+    display: none;
+  }
+}
+@media only screen and (max-width: 990px) {
+  .menu-bar span.menu-bar-item {
     display: none;
   }
   #menu:target .show {
@@ -103,6 +509,10 @@ a.sitename, a:visited.sitename {
   #menu:target .hide, #menu:target .menu-items {
     display: inline-block;
   }
+  .scroller{
+    display: none;
+  }
+
 }
 
 @media only screen and (max-width: 220px) {

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+
+  .container.large
+    .register-container
+      h2 Purchase an Asset
+      form(method='post', id='registerAssetForm', action='#')
+       label(for="asset") Asset Tag:
+       input.form-control(type='text', name='asset', placeholder='Enter an Tag for the Asset', disabled='')
+       label(for="assetDescription") Asset Description:
+       input.form-control(type='text', name='assetDescription', placeholder='Enter an Description for the Asset', required='')
+       label(for="assetLength") Asset Expires (In days):
+       input.form-control(type='number', name='assetLength', placeholder='Enter the Asset Expires (Ex. 1)', required='')
+       label(for="assetValue") Asset Value (In dollars):
+       input.form-control(type='number', name='assetValue', placeholder='Enter the Value of the Asset (Ex. 10.00)', required='')
+       label(for="assetAmount") Asset Quantity:
+       input.form-control(type='number', name='assetAmount', placeholder='Enter the Quantity of the Asset (Ex. 1)', required='')
+       input.btn(type='submit', value='Purchase Asset')
+      #RegisterAssetResults.resultBox

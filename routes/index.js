@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'DNS Chain' });
+  res.render('main', { title: 'DNS Chain' });
 });
 
 router.route('/myaccount').get(function( req, res) {
@@ -27,7 +27,7 @@ router.route('/mytrades').get(function(req, res) {
 });
 
 router.route('/search').get(function(req, res) {
-  res.render('search', { title: 'DNS Search'});
+  res.render('search', { title: 'DNS Search', search: req.body.lookup});
 });
 
 router.route('/transfer').get(function(req, res) {

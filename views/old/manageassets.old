@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  script(type='text/javascript').
+    setAuth("#{username}");
+
+  .container.large
+    .assets-list-container
+      h2 My Assets
+      #myAssetTableStats
+      table#myAssetTable
+        thead
+          tr 
+            th Name
+            th Registered
+            th Expires
+            th Quantity
+            th Value
+            th Actions
+        tbody
+          tr
+            td(colspan='6')
+              .loading-dot2
+              .loading-dot2.second
+              .loading-dot2.third
+      #AssetTableResults.resultBox
