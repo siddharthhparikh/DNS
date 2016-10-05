@@ -14,9 +14,9 @@ block content
         .h1 Domain Search
         .flexsearch
         .flexsearch--wrapper
-        form.flexsearch--form(action='lookup', method='post')
+        form.flexsearch--form(action='/searchd', method='post')
             .flexsearch--input-wrapper
-                input.flexsearch--input(type='search', placeholder='www.example.com')
+                input.flexsearch--input(type='search', placeholder='www.example.com', name='lookupd')
             |  
             input.flexsearch--submit(type='submit', value='➜')
 
@@ -25,9 +25,9 @@ block content
         .h1 User Search
         .flexsearch
         .flexsearch--wrapper
-        form.flexsearch--form(action='#', method='post')
+        form.flexsearch--form(action='/searchu', method='post')
             .flexsearch--input-wrapper
-                input.flexsearch--input(type='search', placeholder='i.e. Siddarth Parikh')
+                input.flexsearch--input(type='search', placeholder='i.e. Siddarth Parikh', name='lookupu')
             |  
             input.flexsearch--submit(type='submit', value='➜')
     div.container( style='height: 1000px')
