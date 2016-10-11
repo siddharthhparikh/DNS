@@ -44,6 +44,10 @@ router.route('/login').get(function(req, res) {
   res.render('login', {title: 'Login'});
 });
 
+router.route('/editaccount').get(function(req,res) {
+  res.render('editaccount');
+});
+
 router.post('/searchd', function(req, res, next) {
   //TODO use search results
   var searchTerm = req.body.lookupd;
