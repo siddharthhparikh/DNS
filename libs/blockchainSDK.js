@@ -141,7 +141,7 @@ if (fs.existsSync("us.blockchain.ibm.com.cert")) {
 
                 chain.setRegistrar(WebAppAdmin);
                 console.log('enrolling user \'%s\' with secret \'%s\' as registrar...', "WebAppAdmin", pwd);
-                exports.deploy('./dns/SidBranch/BlockChain-DNS/chaincode/src/', ['ready!'], function (chaincodeID) { //TODO figure out chaincode path
+                exports.deploy('', ['ready!'], function (chaincodeID) { //TODO figure out chaincode path
                     user_manager.setup(chaincodeID, chain, cb_deployed);
                 });
 
@@ -169,7 +169,7 @@ exports.deploy = function (path, args, cb) {
 
     var deployRequest = {
         args: args,
-        chaincodeID: chaincodeName,
+       // chaincodeID: chaincodeName,
         fcn: 'init',
         chaincodePath: path,
         certificatePath: "/certs/blockchain-cert.pem"
