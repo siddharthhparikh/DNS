@@ -3,8 +3,8 @@ extends layout
 block content
     script(type='text/javascript').
         setAuth("#{username}");
-        $('#logintop').hide();
-
+    //Check if user is logged in and if so use $('#logintop').hide();
+    //to hide the login button
     script(src='https://github.com/kswedberg/jquery-smooth-scroll/blob/master/jquery.smooth-scroll.min.js')
    
     .menu-bar

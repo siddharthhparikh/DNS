@@ -11,7 +11,7 @@ var fs = require('fs');
 var exports = module.exports;
 
 // Create a client chain
-var chaincodeName = 'voting_chaincode'
+var chaincodeName = 'stack'
 var chain = hfc.newChain("voting");
 chain.setDeployWaitTime(300);
 var chaincodeID = null;
@@ -141,7 +141,7 @@ if (fs.existsSync("us.blockchain.ibm.com.cert")) {
 
                 chain.setRegistrar(WebAppAdmin);
                 console.log('enrolling user \'%s\' with secret \'%s\' as registrar...', "WebAppAdmin", pwd);
-                exports.deploy('', ['ready!'], function (chaincodeID) {
+                exports.deploy('./dns/SidBranch/BlockChain-DNS/chaincode/src/', ['ready!'], function (chaincodeID) { //TODO figure out chaincode path
                     user_manager.setup(chaincodeID, chain, cb_deployed);
                 });
 
@@ -169,7 +169,7 @@ exports.deploy = function (path, args, cb) {
 
     var deployRequest = {
         args: args,
-        //chaincodeID: chaincodeName,
+        chaincodeID: chaincodeName,
         fcn: 'init',
         chaincodePath: path,
         certificatePath: "/certs/blockchain-cert.pem"
