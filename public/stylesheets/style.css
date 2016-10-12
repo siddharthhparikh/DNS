@@ -246,6 +246,13 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
   padding: 15px 0px;
 }
 
+
+.accountinfo {
+  font-size: 16px;
+  color: grey;
+  padding-left: 5px;
+}
+
 .scroller {
     display: inline-block;
     font-size: 14px;
