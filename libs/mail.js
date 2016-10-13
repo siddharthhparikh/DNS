@@ -1,6 +1,6 @@
 
 // send mail with defined transport object
-module.exports.email = function (email, cb) {
+module.exports.email = function (email, keys, cb) {
 
     var nodemailer = require('nodemailer');
 
@@ -17,19 +17,10 @@ module.exports.email = function (email, cb) {
     var mailOptions = {
         from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
         to: email, // list of receivers
-        subject: '[Confidential] Private Key', // Subject line
-        text: "please save private key", // plaintext body
-        html: "please save private key", // html body
-        attachments: [
-            {   // file on disk as an attachment
-                filename: email+'.pem',
-                path: "../"+ email + '.pem' // stream this file
-            }
-        ]
+        subject: '[Confidential] Please save your public and private key', // Subject line
+        text: "pubkey:\n" + keys.public + '\nPrivate Key:\n' + keys.private, // plaintext body
+        html: "pubkey:<br></br><br></br>" + keys.public + '<br></br><br></br>Private Key:<br></br><br></br>' + keys.private // html body
     };
-    
-    console.log("Mail Options:")
-    console.log(mailOptions);
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);

@@ -247,6 +247,8 @@ exports.query = function (fcn, args, expectJSON, cb) {
         chaincodeID: chaincodeID
     }
 
+    console.log("Query Request:")
+    console.log(queryRequest)
     var transactionContext = registrar.query(queryRequest);
 
     transactionContext.on('complete', function (results) {

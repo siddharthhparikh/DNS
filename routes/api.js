@@ -25,7 +25,7 @@ router.post('/login', function (req, res, next) {
   console.log("inside /login");
   var args = [username, password];
   console.log(args)
-  chaincode.query('checkAccount', args, function (err, data) {
+  chaincode.query("checkAccount", args, function (err, data) {
     console.log("[ERROR]", err)
     if (err != null) {
       console.log("Account does not exist. Please register");
@@ -189,19 +189,19 @@ router.post('/register', function (req, res) {
   console.log(req.body);
   genKeys(req.body.email, function (keys) {
     console.log(keys.public)
-    //chaincode.invoke('createAccount', [req.body.password, req.body.email, keys.public], function (err, results) {
-    //  if (err != null) {
-    //    res.json('{"status" : "failure", "Error": err}');
-    //  }
-    //  console.log("\n\n\nrequest account result:")
-    //  console.log(results);
-      mail.email(req.body.email, function (err) {
+    chaincode.invoke('createAccount', [req.body.email,"", keys.public, req.body.password], function (err, results) {
+      if (err != null) {
+        res.json('{"status" : "failure", "Error": err}');
+      }
+      console.log("\n\n\nrequest account result:")
+      console.log(results);
+      mail.email(req.body.email, keys, function (err) {
         if (err != null) {
           res.end('{"status" : "failure", "Error": err}');
         }
       });
       res.json('{"status" : "success", "message":"ok"}');
-    //});
+    });
   });
 });
 
