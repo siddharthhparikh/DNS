@@ -44,4 +44,22 @@ router.route('/login').get(function(req, res) {
   res.render('login', {title: 'Login'});
 });
 
+router.route('/editaccount').get(function(req,res) {
+  res.render('editaccount');
+});
+
+router.post('/searchd', function(req, res, next) {
+  //TODO use search results
+  var searchTerm = req.body.lookupd;
+  var results = 'Domain results for \"' + searchTerm + '\"';
+  res.render('results', {title: 'DNS Search', resulttype: results});
+});
+
+router.post('/searchu', function(req, res, next) {
+  //TODO use search results
+  var searchTerm = req.body.lookupu;
+  var results = 'Domain results for \"' + searchTerm + '\"';
+  res.render('results', {title: 'DNS Search', resulttype: results});
+});
+
 module.exports = router;

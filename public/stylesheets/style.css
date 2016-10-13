@@ -270,6 +270,23 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
 
 }
 
+.scroller2:hover {
+  background-color: #0e1225;
+  border-radius: 3px;
+
+}
+
+
+.scroller2 {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #677798;
+    border: none;
+}
+
 a.btn {
   text-decoration: none;
   color: #333;

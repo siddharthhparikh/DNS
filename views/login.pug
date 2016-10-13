@@ -5,6 +5,37 @@ block content
     setAuth("#{username}");
     $('#logintop').hide();
 
+  .menu-bar
+     button.hamburger ☰
+     span.menu-list
+       a.menu-bar-link(href='/')
+         p.menu-bar-item.first Home
+       a.menu-bar-link(href='/buy')
+         p.menu-bar-item Purchase a Domain
+       a.menu-bar-link(href='/transfer')
+         p.menu-bar-item Open a Trade
+       a.menu-bar-link(href='/search')
+         p.menu-bar-item Search
+       a.menu-bar-link(href='/mydomains')
+         p.menu-bar-item My Domains
+       a.menu-bar-link(href='/mytrades')
+         p.menu-bar-item My Trades
+       a.menu-bar-link(href='/myaccount')
+         p.menu-bar-item My Account
+     a(href='/')
+       span.menu-bar-item.first Home
+     a(href='/buy')
+       span.menu-bar-item Purchase a Domain
+     a(href='/transfer')
+       span.menu-bar-item Open a Trade
+     a(href='/search')
+       span.menu-bar-item Search
+     a.menu-bar-link(href='/mydomains')
+       span.menu-bar-item My Domains
+     a(href='/mytrades')
+       span.menu-bar-item My Trades
+     a.menu-bar-link(href='/myaccount')
+       span.menu-bar-item My Account
 
   .container
     h2 Welcome

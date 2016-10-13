@@ -4,7 +4,6 @@ block content
   script(type='text/javascript').
     setAuth("#{username}");
 
-
   .menu-bar
      button.hamburger ☰
      span.menu-list
@@ -37,5 +36,20 @@ block content
      a.menu-bar-link(href='/myaccount')
        span.menu-bar-item My Account
 
+
   .container
-    h2 Open Trade
+    h2 Edit Account Information
+    form#editinfo(method='POST' action='#')
+        label Email:
+        input.form-control#emailin
+        br
+        label Username:
+        input.form-control#usernamein
+        br
+        label First Name:
+        input.form-control#firstnamein
+        br
+        label Last Name:
+        input.form-control#lastnamein
+        br
+        button.btn(type='submit') Submit
