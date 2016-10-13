@@ -204,11 +204,6 @@ def step_impl(context):
     else:
         fail('chaincodeSpec not in context')
 
-@when(u'I invoke chaincode "{chaincodeName}" function name "{functionName}" on "{containerName}" with "{idGenAlg}"')
-def step_impl(context, chaincodeName, functionName, containerName, idGenAlg):
-    assert 'chaincodeSpec' in context, "chaincodeSpec not found in context"
-    invokeChaincode(context, "invoke", functionName, containerName, idGenAlg)
-
 @when(u'I invoke chaincode "{chaincodeName}" function name "{functionName}" on "{containerName}" "{times}" times')
 def step_impl(context, chaincodeName, functionName, containerName, times):
     assert 'chaincodeSpec' in context, "chaincodeSpec not found in context"
@@ -234,7 +229,7 @@ def step_impl(context, chaincodeName, functionName, containerName):
 def step_impl(context, chaincodeName, functionName, containerName):
     invokeChaincode(context, "query", functionName, containerName)
 
-def invokeChaincode(context, devopsFunc, functionName, containerName, idGenAlg=None):
+def invokeChaincode(context, devopsFunc, functionName, containerName):
     assert 'chaincodeSpec' in context, "chaincodeSpec not found in context"
     # Update hte chaincodeSpec ctorMsg for invoke
     args = []
@@ -248,8 +243,6 @@ def invokeChaincode(context, devopsFunc, functionName, containerName, idGenAlg=N
         "chaincodeSpec" : context.chaincodeSpec
     }
     ipAddress = bdd_test_util.ipFromContainerNamePart(containerName, context.compose_containers)
-    if idGenAlg is not None:
-	    chaincodeInvocationSpec['idGenerationAlg'] = idGenAlg
     request_url = buildUrl(context, ipAddress, "/devops/{0}".format(devopsFunc))
     print("{0} POSTing path = {1}".format(currentTime(), request_url))
 
@@ -335,22 +328,6 @@ def step_impl(context, seconds):
     print("Result of request to all peers = {0}".format(respMap))
     print("")
 
-@then(u'I check the transaction ID if it is "{tUUID}"')
-def step_impl(context, tUUID):
-    assert 'transactionID' in context, "transactionID not found in context"
-    assert context.transactionID == tUUID, "transactionID is not tUUID"
-
-def getContainerDataValuesFromContext(context, aliases, callback):
-    """Returns the IPAddress based upon a name part of the full container name"""
-    assert 'compose_containers' in context, "compose_containers not found in context"
-    values = []
-    containerNamePrefix = os.path.basename(os.getcwd()) + "_"
-    for namePart in aliases:
-        for containerData in context.compose_containers:
-            if containerData.containerName.startswith(containerNamePrefix + namePart):
-                values.append(callback(containerData))
-                break
-    return values
 
 @then(u'I wait up to "{seconds}" seconds for transaction to be committed to peers')
 def step_impl(context, seconds):
@@ -498,7 +475,7 @@ def step_impl(context, userName, secret):
         assert resp.status_code == 200, "Failed to POST to %s:  %s" %(request_url, resp.text)
         context.response = resp
         print("message = {0}".format(resp.json()))
-
+    
         # Create new User entry
         bdd_test_util.registerUser(context, secretMsg, containerData.composeService)
 

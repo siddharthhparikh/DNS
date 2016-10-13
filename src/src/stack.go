@@ -75,7 +75,7 @@ func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []st
 
 	if function == "init" {
 		var err error
-
+		fmt.Println("Hello World")
 		fmt.Println("Creating the DNS look up table...")
 		err = stub.CreateTable("NameToIP", []*shim.ColumnDefinition{
 			{"domainName", shim.ColumnDefinition_STRING, true},
@@ -100,6 +100,7 @@ func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []st
 			fmt.Println("Error creating table: ", err)
 		}
 
+		fmt.Println("Creating the Transfer request table...")
 		err = stub.CreateTable("TransferRequests", []*shim.ColumnDefinition{
 			{"RequestID", shim.ColumnDefinition_STRING, true},
 			{"Owner", shim.ColumnDefinition_STRING, false},
@@ -114,6 +115,7 @@ func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []st
 			fmt.Println("Error creating table: ", err)
 		}
 
+		fmt.Println("Creating the Register User table...")
 		err = stub.CreateTable("RegisteredUsers", []*shim.ColumnDefinition{
 			{"userEmail", shim.ColumnDefinition_STRING, true},
 			{"PubKey", shim.ColumnDefinition_STRING, false},
@@ -204,16 +206,18 @@ func (t *DNSChaincode) checkUserPrivKey(stub *shim.ChaincodeStub, args []string)
 func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
+	if function == "init" {
+		return t.Init(stub, "init", args)
+	} else if function == "createAccount" {
+		return t.createAccount(stub, args)
+	}
+
 	if t.checkUserPrivKey(stub,args) == false {
 		return nil, errors.New("Signed by wrong private key. I can smell something fishy")
 	}
 
 	// Handle different functions
-	if function == "init" {
-		return t.Init(stub, "init", args)
-	} else if function == "createAccount" {
-		return t.createAccount(stub, args)
-	} else if function == "registerDomain" {
+	if function == "registerDomain" {
 		return t.registerDomain(stub, args)
 	} else if function == "transferDomain" {
 		return t.transferDomain(stub, args)
@@ -303,8 +307,8 @@ func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []s
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
 	} else if function == "checkAccount" {
-		if len(args) != 1 {
-			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		if len(args) != 2 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 2")
 		}
 
 		data, r_err = t.checkAccount(stub, args)

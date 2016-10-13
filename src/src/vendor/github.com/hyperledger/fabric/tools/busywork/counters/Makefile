@@ -81,9 +81,7 @@ STRESS2 = ./driver \
 		-checkAgreement -dupCheck
 
 stress2b: 
-	@CORE_PBFT_GENERAL_TIMEOUT_NULLREQUEST=3s \
-	$(NETWORK) -batch 4
-	@echo "Sleeping 10 seconds to allow peers to interlock"; sleep 10
+	@$(NETWORK) -batch 4
 	@$(STRESS2)
 
 stress2c: 
@@ -99,9 +97,7 @@ stress2: stress2b stress2c stress2s
 
 .PHONY: secure1
 secure1:
-	@CORE_PBFT_GENERAL_TIMEOUT_NULLREQUEST=3s \
-	$(NETWORK) -batch -security 4
-	@echo "Sleeping 10 seconds to allow peers to interlock"; sleep 10
+	@$(NETWORK) -sieve -security 4
 	@./driver \
 		-transactions 100 \
 		-peerBurst 10 \

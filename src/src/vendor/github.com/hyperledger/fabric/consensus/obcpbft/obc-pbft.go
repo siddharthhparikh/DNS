@@ -55,8 +55,7 @@ func New(stack consensus.Stack) consensus.Consenter {
 
 	switch strings.ToLower(config.GetString("general.mode")) {
 	case "classic":
-		config.Set("general.batchsize", 1)
-		return newObcBatch(id, config, stack)
+		return newObcClassic(id, config, stack)
 	case "batch":
 		return newObcBatch(id, config, stack)
 	case "sieve":

@@ -194,10 +194,8 @@ If you wish to activate TLS connection with the member services the following ac
 ```
 server:
      tls:
-        cert:
-            file: "/var/hyperledger/production/.membersrvc/tlsca.cert"
-        key:
-            file: "/var/hyperledger/production/.membersrvc/tlsca.priv"
+        certfile: "/var/hyperledger/production/.membersrvc/tlsca.cert"
+        keyfile: "/var/hyperledger/production/.membersrvc/tlsca.priv"
 ```
 
 This is needed to instruct the member services on which tls cert and key to use.  

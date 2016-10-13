@@ -36,8 +36,8 @@ It has these top-level messages:
 	ExecuteWithBinding
 	SigmaOutput
 	BuildResult
-	TransactionRequest
 	ChaincodeReg
+	TransactionRequest
 	Interest
 	Register
 	Event

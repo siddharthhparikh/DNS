@@ -141,7 +141,7 @@ if (fs.existsSync("us.blockchain.ibm.com.cert")) {
 
                 chain.setRegistrar(WebAppAdmin);
                 console.log('enrolling user \'%s\' with secret \'%s\' as registrar...', "WebAppAdmin", pwd);
-                exports.deploy('src/', ['ready!'], function (chaincodeID) {
+                exports.deploy('src/', [], function (chaincodeID) {
                    user_manager.setup(chaincodeID, chain, cb_deployed);
                 });
 

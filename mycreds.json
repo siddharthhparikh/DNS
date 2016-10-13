@@ -12,42 +12,6 @@
         "container_id": "c7d2fb5e528df303dc34dbc1d071251d8596d83f2c775679352a39c20fac7c8e",
         "id": "d2c14283-4421-4e88-ba52-20a58e6c51d9_vp0",
         "api_url": "http://shparikh-peer1-1.rtp.raleigh.ibm.com:5001"
-      },
-      {
-        "discovery_host": "shparikh-peer2-1.rtp.raleigh.ibm.com",
-        "discovery_port": 30303,
-        "api_host": "shparikh-peer2-1.rtp.raleigh.ibm.com",
-        "api_port_tls": 5001,
-        "api_port": 5001,
-        "type": "peer",
-        "network_id": "d2c14283-4421-4e88-ba52-20a58e6c51d9",
-        "container_id": "1ae56861cb8b3d4dc9b64e8557dd2a293d07fd0d5ca19b30e970f2836f47b05f",
-        "id": "d2c14283-4421-4e88-ba52-20a58e6c51d9_vp1",
-        "api_url": "http://shparikh-peer2-1.rtp.raleigh.ibm.com:5001"
-      },
-      {
-        "discovery_host": "shparikh-peer3-1.rtp.raleigh.ibm.com",
-        "discovery_port": 30303,
-        "api_host": "shparikh-peer3-1.rtp.raleigh.ibm.com",
-        "api_port_tls": 5001,
-        "api_port": 5001,
-        "type": "peer",
-        "network_id": "d2c14283-4421-4e88-ba52-20a58e6c51d9",
-        "container_id": "f98040c4d9101f5e118e28309bb3691a39bdaea341e6c4018d0912366ea46804",
-        "id": "d2c14283-4421-4e88-ba52-20a58e6c51d9_vp2",
-        "api_url": "http://shparikh-peer3-1.rtp.raleigh.ibm.com:5001"
-      },
-      {
-        "discovery_host": "shparikh-peer4-1.rtp.raleigh.ibm.com",
-        "discovery_port": 30303,
-        "api_host": "shparikh-peer4-1.rtp.raleigh.ibm.com",
-        "api_port_tls": 5001,
-        "api_port": 5001,
-        "type": "peer",
-        "network_id": "d2c14283-4421-4e88-ba52-20a58e6c51d9",
-        "container_id": "0e140ab93722c432d9792a85da498326b7c508e1197e634353028b2de0d66d23",
-        "id": "d2c14283-4421-4e88-ba52-20a58e6c51d9_vp3",
-        "api_url": "http://shparikh-peer4-1.rtp.raleigh.ibm.com:5001"
       }
     ],
     "ca": {

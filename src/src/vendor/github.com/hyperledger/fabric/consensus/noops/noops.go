@@ -67,18 +67,18 @@ func newNoops(c consensus.Stack) consensus.Consenter {
 	i.stack = c
 	config := loadConfig()
 	blockSize := config.GetInt("block.size")
-	blockWait := config.GetString("block.wait")
-	if _, err = strconv.Atoi(blockWait); err == nil {
-		blockWait = blockWait + "s" //if string does not have unit of measure, default to seconds
+	blockTimeout := config.GetString("block.timeout")
+	if _, err = strconv.Atoi(blockTimeout); err == nil {
+		blockTimeout = blockTimeout + "s" //if string does not have unit of measure, default to seconds
 	}
-	i.duration, err = time.ParseDuration(blockWait)
+	i.duration, err = time.ParseDuration(blockTimeout)
 	if err != nil || i.duration == 0 {
-		panic(fmt.Errorf("Cannot parse block wait: %s", err))
+		panic(fmt.Errorf("Cannot parse block timeout: %s", err))
 	}
 
 	logger.Infof("NOOPS consensus type = %T", i)
 	logger.Infof("NOOPS block size = %v", blockSize)
-	logger.Infof("NOOPS block wait = %v", i.duration)
+	logger.Infof("NOOPS block timeout = %v", i.duration)
 
 	i.txQ = newTXQ(blockSize)
 
