@@ -10,8 +10,7 @@ var router = express.Router();
 var session = require('express-session');
 var chaincode = require('../libs/blockchainSDK');
 var mail = require('../libs/mail')
-
-var DEFAULT_VOTES = 5;
+var cryptico = require('cryptico')
 
 /* Login in request. */
 router.post('/login', function (req, res, next) {
@@ -21,13 +20,12 @@ router.post('/login', function (req, res, next) {
 
   console.log("[USER]", user);
 
-  var username = user.account_id;
+  var username = user.username;
   var password = user.password;
   console.log("inside /login");
-  var args = [];
-  args.push(username);
-  args.push(password);
-  chaincode.query('check_account', args, function (err, data) {
+  var args = [username, password];
+  console.log(args)
+  chaincode.query('checkAccount', args, function (err, data) {
     console.log("[ERROR]", err)
     if (err != null) {
       console.log("Account does not exist. Please register");
@@ -40,10 +38,10 @@ router.post('/login', function (req, res, next) {
     console.log(req.session.name);
     //Send response.
     if (username.indexOf('manager') > -1) {
-      res.end('{"status" : "success", "type": "manager"}');
+      res.end('{"status" : "success", "type": "manager", "message": "ok"}');
     }
     else {
-      res.end('{"status" : "success", "type": "user"}');
+      res.end('{"status" : "success", "type": "user", "message": "ok"}');
     }
   });
 });
@@ -165,15 +163,45 @@ router.get('/user', function (req, res) {
 });
 
 /* Regiister a user */
+
+// gen pub priv key pair
+var cp = require('child_process')
+  , assert = require('assert')
+  , fs = require('fs')
+  ;
+
+function genKeys(email, cb){
+    // gen private
+    cp.exec('openssl genrsa 2048', function(err, priv, stderr) {
+      // tmp file
+      var randomfn = './' + email + '.pem';
+      fs.writeFileSync(randomfn, priv);
+      // gen public
+      cp.exec('openssl rsa -in '+randomfn+' -pubout', function(err, pub, stderr) {
+           // delete tmp file
+           //fs.unlinkSync(randomfn);
+           // callback
+           cb({public: pub, private: priv});
+      });
+    });
+}
 router.post('/register', function (req, res) {
   console.log(req.body);
-  chaincode.invoke('request_account', [req.body.name, req.body.email, req.body.org, req.body.privileges], function (err, results) {
-    if (err != null) {
-      res.json('{"status" : "failure", "Error": err}');
-    }
-    console.log("\n\n\nrequest account result:")
-    console.log(results);
-    res.json('{"status" : "success"}');
+  genKeys(req.body.email, function (keys) {
+    console.log(keys.public)
+    //chaincode.invoke('createAccount', [req.body.password, req.body.email, keys.public], function (err, results) {
+    //  if (err != null) {
+    //    res.json('{"status" : "failure", "Error": err}');
+    //  }
+    //  console.log("\n\n\nrequest account result:")
+    //  console.log(results);
+      mail.email(req.body.email, function (err) {
+        if (err != null) {
+          res.end('{"status" : "failure", "Error": err}');
+        }
+      });
+      res.json('{"status" : "success", "message":"ok"}');
+    //});
   });
 });
 

@@ -1,6 +1,6 @@
 
 // send mail with defined transport object
-module.exports.email = function (email, creds, cb) {
+module.exports.email = function (email, cb) {
 
     var nodemailer = require('nodemailer');
 
@@ -14,25 +14,20 @@ module.exports.email = function (email, creds, cb) {
     });
     console.log("email = " + email);
     // setup e-mail data with unicode symbols
-    if (creds == 'declined') {
-        var mailOptions = {
-            from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
-            to: email, // list of receivers
-            subject: '[Confidential] Vote Chain Account Request Update', // Subject line
-            text: 'your account request has been declined',
-            html: 'your account request has been declined'
-
-        };
-    } else {
-        var mailOptions = {
-            from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
-            to: email, // list of receivers
-            subject: '[Confidential] Vote Chain Password', // Subject line
-            text: 'username: ' + creds.id + '\npassword: ' + creds.secret, // plaintext body
-            html: 'username: ' + creds.id + '\npassword: ' + creds.secret // html body
-
-        };
-    }
+    var mailOptions = {
+        from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: '[Confidential] Private Key', // Subject line
+        text: "please save private key", // plaintext body
+        html: "please save private key", // html body
+        attachments: [
+            {   // file on disk as an attachment
+                filename: email+'.pem',
+                path: "../"+ email + '.pem' // stream this file
+            }
+        ]
+    };
+    
     console.log("Mail Options:")
     console.log(mailOptions);
     transporter.sendMail(mailOptions, function (error, info) {

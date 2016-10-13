@@ -38,12 +38,12 @@ try {
     var manual = JSON.parse(fs.readFileSync('mycreds.json', 'utf8'));
     var peers = manual.credentials.peers;
     for (var i in peers) {
-        peerURLs.push("grpcs://" + peers[i].discovery_host + ":" + peers[i].discovery_port);
+        peerURLs.push("grpc://" + peers[i].discovery_host + ":" + peers[i].discovery_port);
         peerHosts.push("" + peers[i].discovery_host);
     }
     var ca = manual.credentials.ca;
     for (var i in ca) {
-        caURL = "grpcs://" + ca[i].url;
+        caURL = "grpc://" + ca[i].url;
     }
     console.log('loading hardcoded peers');
     var users = null;																			//users are only found if security is on
@@ -71,14 +71,14 @@ if (process.env.VCAP_SERVICES) {
                 peerURLs = [];
                 peerHosts = [];
                 for (var j in peers) {
-                    peerURLs.push("grpcs://" + peers[j].discovery_host + ":" + peers[j].discovery_port);
+                    peerURLs.push("grpc://" + peers[j].discovery_host + ":" + peers[j].discovery_port);
                     peerHosts.push("" + peers[j].discovery_host);
                 }
                 if (servicesObject[i][0].credentials.ca) {
                     console.log('overwritting ca, loading from a vcap service: ', i);
                     ca = servicesObject[i][0].credentials.ca;
                     for (var z in ca) {
-                        caURL = "grpcs://" + ca[z].discovery_host + ":" + ca[z].discovery_port;
+                        caURL = "grpc://" + ca[z].discovery_host + ":" + ca[z].discovery_port;
                     }
                     if (servicesObject[i][0].credentials.users) {
                         console.log('overwritting users, loading from a vcap service: ', i);
@@ -104,18 +104,18 @@ for (var z in users) {
 if (fs.existsSync("us.blockchain.ibm.com.cert")) {
     var pem = fs.readFileSync('us.blockchain.ibm.com.cert');
 
-    chain.setECDSAModeForGRPC(true);
+    //chain.setECDSAModeForGRPC(true);
 
     console.log('loading hardcoding users and certificate authority...')
 
     // Set the URL for member services
     console.log('adding ca: \'' + caURL + '\'');
-    chain.setMemberServicesUrl(caURL, { pem: pem });
+    chain.setMemberServicesUrl(caURL);
 
     // Add all peers' URL
     for (var i in peerURLs) {
         console.log('adding peer: \'' + peerURLs[i] + '\'');
-        chain.addPeer(peerURLs[i], { pem: pem });
+        chain.addPeer(peerURLs[i]);
     }
 
     chain.getMember("WebAppAdmin", function (err, WebAppAdmin) {
@@ -141,7 +141,7 @@ if (fs.existsSync("us.blockchain.ibm.com.cert")) {
 
                 chain.setRegistrar(WebAppAdmin);
                 console.log('enrolling user \'%s\' with secret \'%s\' as registrar...', "WebAppAdmin", pwd);
-                exports.deploy('', ['ready!'], function (chaincodeID) {
+                exports.deploy('src/', ['ready!'], function (chaincodeID) {
                     user_manager.setup(chaincodeID, chain, cb_deployed);
                 });
 
@@ -172,7 +172,6 @@ exports.deploy = function (path, args, cb) {
         //chaincodeID: chaincodeName,
         fcn: 'init',
         chaincodePath: path,
-        certificatePath: "/certs/blockchain-cert.pem"
     }
     console.log('deploying chaincode from path %s', deployRequest.chaincodePath)
     var transactionContext = registrar.deploy(deployRequest);

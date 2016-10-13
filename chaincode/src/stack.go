@@ -292,7 +292,8 @@ func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []s
 
 	var data interface{}
 	var r_err error
-
+	fmt.Println("In query:")
+	fmt.Println(args)	
 	if function == "query_stats" {
 		if len(args) != 0 {
 			return nil, errors.New("Incorrect number of arguments. Expecting 0")
@@ -303,8 +304,8 @@ func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []s
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
 	} else if function == "checkAccount" {
-		if len(args) != 1 {
-			return nil, errors.New("Incorrect number of arguments. Expecting 1")
+		if len(args) != 2 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 2")
 		}
 
 		data, r_err = t.checkAccount(stub, args)
