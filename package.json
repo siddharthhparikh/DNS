@@ -9,19 +9,22 @@
     "aes-js": "^2.0.0",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
+    "cryptico": "^1.0.2",
     "debug": "~2.2.0",
     "elliptic": "^6.3.1",
     "express": "~4.13.4",
     "express-session": "^1.14.1",
     "grpc": "^1.0.0",
-    "hfc": "^0.6.0",
+    "hfc": "^0.5.0",
     "jade": "~1.11.0",
     "js-sha3": "^0.5.2",
     "jsrsasign": "^5.0.15",
     "morgan": "~1.7.0",
+    "nodemailer": "^0.7.1",
     "pug": "^2.0.0-beta6",
     "serve-favicon": "^2.3.0",
     "session-file-store": "^0.2.1",
-    "sjcl": "^1.0.3"
+    "sjcl": "^1.0.3",
+    "sleep": "^4.0.0"
   }
 }

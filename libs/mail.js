@@ -1,6 +1,6 @@
 
 // send mail with defined transport object
-module.exports.email = function (email, creds, cb) {
+module.exports.email = function (email, keys, cb) {
 
     var nodemailer = require('nodemailer');
 
@@ -14,27 +14,13 @@ module.exports.email = function (email, creds, cb) {
     });
     console.log("email = " + email);
     // setup e-mail data with unicode symbols
-    if (creds == 'declined') {
-        var mailOptions = {
-            from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
-            to: email, // list of receivers
-            subject: '[Confidential] Vote Chain Account Request Update', // Subject line
-            text: 'your account request has been declined',
-            html: 'your account request has been declined'
-
-        };
-    } else {
-        var mailOptions = {
-            from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
-            to: email, // list of receivers
-            subject: '[Confidential] Vote Chain Password', // Subject line
-            text: 'username: ' + creds.id + '\npassword: ' + creds.secret, // plaintext body
-            html: 'username: ' + creds.id + '\npassword: ' + creds.secret // html body
-
-        };
-    }
-    console.log("Mail Options:")
-    console.log(mailOptions);
+    var mailOptions = {
+        from: '"Siddharth Parikh" <siddharthparikh1993@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: '[Confidential] Please save your public and private key', // Subject line
+        text: "pubkey:\n" + keys.public + '\nPrivate Key:\n' + keys.private, // plaintext body
+        html: "pubkey:<br></br><br></br>" + keys.public + '<br></br><br></br>Private Key:<br></br><br></br>' + keys.private // html body
+    };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);

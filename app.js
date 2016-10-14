@@ -9,6 +9,7 @@ var fs = require('fs');
 
 
 var app = express();
+process.env.GOPATH = __dirname;
 // Set favicon, logger, parsers, and the static assets directory
 app.use(favicon(__dirname + '/public/favicon.ico'));
 

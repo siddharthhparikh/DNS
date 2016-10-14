@@ -81,9 +81,15 @@ function myRegisterUser(user, role, cb) {
             console.log("registering user..........");
             console.log("user = ")
             console.log(user)
+            /*var registrationRequest = {
+                enrollmentID: user,
+                role: 1, // Client
+                account: "group1",
+                affiliation: "00001"
+            };*/
             var registrationRequest = {
                 enrollmentID: user,
-                account: "group1",
+                account: "bank_a",
                 affiliation: "00001"
             };
             console.log(registrationRequest);
@@ -110,8 +116,8 @@ function myRegisterUser(user, role, cb) {
                 }
             });
         } else {
-            console.log("User alreay exists. Please login.");
-            cb(new Error("User alreay exists. Please login."), null);
+            console.log("User already exists. Please login.");
+            cb(new Error("User already exists. Please login."), null);
         }
     });
 }

@@ -95,16 +95,17 @@ $(document).ready(function () {
 
     $("#loginAccountForm").submit(function (event) {
         event.preventDefault();
-
+        console.log($('#loginAccountForm input[name="username"]').val(), $('#loginAccountForm input[name="password"]').val())
         if ($('#loginAccountForm input[name="username"]').val().length > 0 && $('#loginAccountForm input[name="password"]').val().length > 0) {
             $("#LoginResults").html("Sent Request! Waiting for response <div class=\"loading-dot\"></div><div class=\"loading-dot second\"></div><div class=\"loading-dot third\"></div>");
             $('#LoginResults').css("visibility", "visible");
-            $.post("/login", { username: $('#loginAccountForm input[name="username"]').val(), password: $('#loginAccountForm input[name="password"]').val() })
+            $.post("/api/login", { username: $('#loginAccountForm input[name="username"]').val(), password: $('#loginAccountForm input[name="password"]').val() })
                 .done(function (data) {
                     var converted = JSON.parse(data);
-
+                    console.log(converted)
                     if (converted.message == "ok") {
                         window.location.href = '/';
+                        console.log("successful login")
                     } else {
                         $("#LoginResults").text("Error: Invalid username/password");
                         $("#loginAccountForm .btn").removeAttr("disabled");
@@ -124,10 +125,27 @@ $(document).ready(function () {
     $("#createAccountForm").submit(function (event) {
         event.preventDefault();
 
-        if ($('#createAccountForm input[name="username"]').val().length > 0) {
+        if ($('#createAccountForm input[name="email"]').val().length > 0) {
             $("#CreateAccountResults").html("Sent Request! Waiting for response <div class=\"loading-dot\"></div><div class=\"loading-dot second\"></div><div class=\"loading-dot third\"></div>");
             $('#CreateAccountResults').css("visibility", "visible");
-            sendMessage(JSON.stringify({ fcn: "register", type: "other", args: [$('#createAccountForm input[name="username"]').val()] }));
+            //sendMessage(JSON.stringify({ fcn: "register", type: "other", args: [$('#createAccountForm input[name="username"]').val()] }));
+
+            //Add check: compare password
+            $.post("/api/register", { password: $('#createAccountForm input[name="password"]').val(), email: $('#createAccountForm input[name="email"]').val()})
+                .done(function (data) {
+                    var converted = JSON.parse(data);
+                    console.log(converted)
+                    if (converted.message == "ok") {
+                        window.location.href = '/login';
+                        console.log("successful registration")
+                    } else {
+                        $("#CreateAccountResults").text("Error: Username or Email already exists");
+                        $("#createAccountForm .btn").removeAttr("disabled");
+                    }
+                }).fail(function () {
+                    $("#LoginResults").text("Error: Failed to complete request");
+                    $("#loginAccountForm .btn").removeAttr("disabled");
+                });
             $("#createAccountForm .btn").attr("disabled", "");
         } else {
             $('#CreateAccountResults').css("visibility", "visible");
@@ -150,6 +168,8 @@ $(document).ready(function () {
             $('#OpenTradeResults').text("Error: Some fields are blank");
         }
     });
+
+
 
 
 

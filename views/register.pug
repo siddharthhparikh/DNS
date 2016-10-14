@@ -38,12 +38,9 @@ block content
             span.menu-bar-item My Account
     .container
         h2 Register
-        form(method='POST' id='loginAccountForm' action='#')
+        form(method='POST' id='createAccountForm' action='#')
             label Email:
             input.form-control(type='text' name='email' placeholder='Enter email address' autofocus)
-            label Username:
-            input.form-control(type='text' name='username' placeholder='Enter Username')
-            a.btn(href='/keys' target='_blank' style='color: black; width: 95%; margin-bottom: 15px;') Generate Keys
             label Password:
             input.form-control(type='password' name='password' placeholder='Enter Password')
             input.form-control(type='password' name='passwordCheck' placeholder='Re-enter Password')
