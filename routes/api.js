@@ -23,13 +23,13 @@ router.post('/login', function (req, res, next) {
   var username = user.username;
   var password = user.password;
   console.log("inside /login");
-  var args = [username, password];
+  var args = [username, "", password];
   console.log(args)
   chaincode.query("checkAccount", args, function (err, data) {
     console.log("[ERROR]", err)
     if (err != null) {
-      console.log("Account does not exist. Please register");
-      res.end('{"status" : "Account does not exist. Please register."}');
+      console.log(err);
+      res.end('{"status" : err}');
     }
 
     console.log(user);

@@ -56,6 +56,7 @@ type account struct {
 	email 				string 	`json:"email"`
 	registrationDate 	string 	`json:"reg_date"`
 	pubKey 				string 	`json:"pub_key"`
+	password 			string 	`json:"passwd"`
 }
 // ============================================================================================================================
 // Main
@@ -119,6 +120,7 @@ func (t *DNSChaincode) Init(stub *shim.ChaincodeStub, function string, args []st
 		err = stub.CreateTable("RegisteredUsers", []*shim.ColumnDefinition{
 			{"userEmail", shim.ColumnDefinition_STRING, true},
 			{"PubKey", shim.ColumnDefinition_STRING, false},
+			{"Password", shim.ColumnDefinition_STRING, false},
 			{"RegistrationDate", shim.ColumnDefinition_STRING, false},
 			{"DomainOwned", shim.ColumnDefinition_STRING, false},
 			{"RequestedBids", shim.ColumnDefinition_STRING, false},
@@ -229,6 +231,15 @@ func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []
 	return nil, errors.New("Received unknown function invocation")
 }
 func (t *DNSChaincode) checkAccount(stub *shim.ChaincodeStub, args []string) (bool, error) {
+	row, rowErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: args[0]}}})
+	if rowErr != nil {
+		fmt.Println(fmt.Sprintf("[ERROR] Could not retrieve the rows: %s", rowErr))
+		return false, rowErr
+	}
+	if row.Columns[2].GetString_() != args[2] {
+		return false, errors.New("Password is incorrect.")
+	}  
+	fmt.Println(t.checkUserPrivKey(stub,args))
 	return t.checkUserPrivKey(stub,args), nil
 }
 func (t *DNSChaincode) getDomainName(stub *shim.ChaincodeStub, args []string) (string, error) {
@@ -258,7 +269,7 @@ func (t *DNSChaincode) getOwnedDomains(stub *shim.ChaincodeStub, args []string) 
 	if userErr != nil || len(userRow.Columns) == 0 {
 		return "", errors.New("Error occurred in getting Account. Account Does not exist")
 	} else {
-		return userRow.Columns[3].GetString_(), nil
+		return userRow.Columns[4].GetString_(), nil
 	}
 }
 func (t *DNSChaincode) getOwnedBids(stub *shim.ChaincodeStub, args []string) (string, error) {
@@ -270,7 +281,7 @@ func (t *DNSChaincode) getOwnedBids(stub *shim.ChaincodeStub, args []string) (st
 	if userErr != nil || len(userRow.Columns) == 0 {
 		return "", errors.New("Error occurred in getting Account. Account Does not exist")
 	} else {
-		return userRow.Columns[5].GetString_(), nil
+		return userRow.Columns[6].GetString_(), nil
 	}
 }
 func (t *DNSChaincode) getTransferRequests(stub *shim.ChaincodeStub, args []string) (string, error) {
@@ -282,7 +293,7 @@ func (t *DNSChaincode) getTransferRequests(stub *shim.ChaincodeStub, args []stri
 	if userErr != nil || len(userRow.Columns) == 0 {
 		return "", errors.New("Error occurred in getting Account. Account Does not exist")
 	} else {
-		return userRow.Columns[4].GetString_(), nil
+		return userRow.Columns[5].GetString_(), nil
 	}
 }
 
@@ -307,13 +318,16 @@ func (t *DNSChaincode) Query(stub *shim.ChaincodeStub, function string, args []s
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
 		}
 	} else if function == "checkAccount" {
-		if len(args) != 2 {
-			return nil, errors.New("Incorrect number of arguments. Expecting 2")
+		if len(args) != 3 {
+			return nil, errors.New("Incorrect number of arguments. Expecting 3")
 		}
 
 		data, r_err = t.checkAccount(stub, args)
 		if r_err != nil {
 			return nil, errors.New("{\"error\":\"" + r_err.Error() + "\"}")
+		}
+		if data == false {
+			return nil, errors.New("Signature does not match")
 		}
 	} else if function == "getDomainName" {
 		if len(args) != 1 {
@@ -463,8 +477,9 @@ func (t *DNSChaincode) placeBid(stub *shim.ChaincodeStub, args []string) ([]byte
 				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
-				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[4].GetString_(),transectionID},",")}},
-				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[4].GetString_()}},
+				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[5].GetString_(),transectionID},",")}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[6].GetString_()}},
 			},
 		})
 
@@ -486,7 +501,8 @@ func (t *DNSChaincode) placeBid(stub *shim.ChaincodeStub, args []string) ([]byte
 				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[4].GetString_()}},
-				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[5].GetString_(),transectionID},",")}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[6].GetString_(),transectionID},",")}},
 			},
 		})
 
@@ -501,13 +517,14 @@ func (t *DNSChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([
 
 	//args[0] = emailID
 	//args[2] = public key
-	acc := account{email: args[0], registrationDate: time.Now().Format("02 Jan 06 15:04 MST"), pubKey: args[2]} 
+	acc := account{email: args[0], registrationDate: time.Now().Format("02 Jan 06 15:04 MST"), pubKey: args[2], password: args[3]} 
 	accountRow, err := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: acc.email}}})
 	if err != nil || len(accountRow.Columns) == 0 {
 		rowAdded, rowErr := stub.InsertRow("RegisteredUsers", shim.Row{
 			Columns: []*shim.Column{
 				&shim.Column{Value: &shim.Column_String_{String_: acc.email}},
 				&shim.Column{Value: &shim.Column_String_{String_: acc.pubKey}},
+				&shim.Column{Value: &shim.Column_String_{String_: acc.password}},
 				&shim.Column{Value: &shim.Column_String_{String_: acc.registrationDate}},
 				&shim.Column{Value: &shim.Column_String_{String_: ""}},
 				&shim.Column{Value: &shim.Column_String_{String_: ""}},
@@ -522,6 +539,15 @@ func (t *DNSChaincode) createAccount(stub *shim.ChaincodeStub, args []string) ([
 		return nil, errors.New("Account already exists. Please login.")
 	}
 
+	rowChan, rowErr := stub.GetRows("RegisteredUsers", []shim.Column{})
+	if rowErr != nil {
+		fmt.Println(fmt.Sprintf("[ERROR] Could not retrieve the rows: %s", rowErr))
+		return nil, rowErr
+	}
+	fmt.Println("in get User ID chanValue:")
+	for chanValue := range rowChan {
+		fmt.Println(chanValue.Columns[0]);
+	}
 	return nil, nil
 }
 func (t *DNSChaincode) registerDomain(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
@@ -583,9 +609,10 @@ func (t *DNSChaincode) registerDomain(stub *shim.ChaincodeStub, args []string) (
 				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
-				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[3].GetString_(),domainName},",")}},
-				{Value: &shim.Column_String_{String_: accountRow.Columns[4].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
+				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[4].GetString_(),domainName},",")}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[6].GetString_()}},
 			},
 		})
 
@@ -648,7 +675,7 @@ func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) (
 	if accountErr != nil || len(accountRow.Columns) == 0 {
 		return nil, errors.New("Account does not exists. Not sure how did you get this far but its time to go back and register.")	
 	} else {
-		arr := strings.Split(accountRow.Columns[3].GetString_(), ",")
+		arr := strings.Split(accountRow.Columns[4].GetString_(), ",")
 		temp := ""
 		for i:=0; i<len(arr); i++ {
 			if(arr[i] != domainName) {
@@ -656,7 +683,7 @@ func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) (
 			}
 		}
 
-		arr = strings.Split(accountRow.Columns[4].GetString_(), ",")
+		arr = strings.Split(accountRow.Columns[5].GetString_(), ",")
 		temp2 := ""
 		for i:=0; i<len(arr); i++ {
 			if(arr[i] != requestID) {
@@ -669,9 +696,10 @@ func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) (
 				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
 				{Value: &shim.Column_String_{String_: temp}},
 				{Value: &shim.Column_String_{String_: temp2}},
-				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[6].GetString_()}},
 			},
 		})
 
@@ -684,7 +712,7 @@ func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) (
 	if accountErr != nil || len(accountRow.Columns) == 0 {
 		return nil, errors.New("Account does not exists. Not sure how did you get this far but its time to go back and register.")	
 	} else {
-		arr := strings.Split(accountRow.Columns[5].GetString_(), ",")
+		arr := strings.Split(accountRow.Columns[6].GetString_(), ",")
 		temp := ""
 		for i:=0; i<len(arr); i++ {
 			if(arr[i] != domainName) {
@@ -697,8 +725,9 @@ func (t *DNSChaincode) transferDomain(stub *shim.ChaincodeStub, args []string) (
 				{Value: &shim.Column_String_{String_: accountRow.Columns[0].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[1].GetString_()}},
 				{Value: &shim.Column_String_{String_: accountRow.Columns[2].GetString_()}},
-				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[3].GetString_(),domainName},",")}},
-				{Value: &shim.Column_String_{String_: accountRow.Columns[4].GetString_()}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[3].GetString_()}},
+				{Value: &shim.Column_String_{String_: strings.Join([]string{accountRow.Columns[4].GetString_(),domainName},",")}},
+				{Value: &shim.Column_String_{String_: accountRow.Columns[5].GetString_()}},
 				{Value: &shim.Column_String_{String_: temp}},
 			},
 		})
