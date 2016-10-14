@@ -193,16 +193,20 @@ func (t *DNSChaincode) parsePublicKey(pemBytes []byte) (Unsigner, error) {
 	return t.newUnsignerFromKey(rawkey)
 }
 
-func (t *DNSChaincode) checkUserPrivKey(stub *shim.ChaincodeStub, args []string) (bool) {
+func (t *DNSChaincode) checkUserPrivKey(stub *shim.ChaincodeStub, args []string) (bool, error) {
 	//pubKey := t.getUserPubKey(stub,args)
 	//signature := []byte(args[1])
 	signByte, _ := hex.DecodeString(args[1])
-	pubByte, _ := hex.DecodeString(t.getUserPubKey(stub,args))
+	pubKey := t.getUserPubKey(stub,args)
+	if pubKey != "" {
+		return false, errors.New("Account does not exist") 
+	}
+	pubByte, _ := hex.DecodeString(pubKey)
 	key, keyError := t.parsePublicKey(pubByte)
 	if keyError == nil {
-		return key.Unsign([]byte(args[0]), signByte) == nil
+		return key.Unsign([]byte(args[0]), signByte) == nil, nil
 	}
-	return false
+	return false, errors.New("Error: issue with the signing")
 }
 // Invoke is our entry point to invoke a chaincode function
 func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
@@ -214,8 +218,9 @@ func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []
 		return t.createAccount(stub, args)
 	}
 
-	if t.checkUserPrivKey(stub,args) == false {
-		return nil, errors.New("Signed by wrong private key. I can smell something fishy")
+	check, err := t.checkUserPrivKey(stub,args)
+	if  check == false || err != nil {
+		return nil, errors.New("Signed by wrong private key. I can smell something fishy, Error: " + err.Error())
 	}
 
 	// Handle different functions
@@ -232,15 +237,19 @@ func (t *DNSChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []
 }
 func (t *DNSChaincode) checkAccount(stub *shim.ChaincodeStub, args []string) (bool, error) {
 	row, rowErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: args[0]}}})
-	if rowErr != nil {
+	if rowErr != nil || len(row.Columns) == 0 {
 		fmt.Println(fmt.Sprintf("[ERROR] Could not retrieve the rows: %s", rowErr))
 		return false, rowErr
 	}
 	if row.Columns[2].GetString_() != args[2] {
 		return false, errors.New("Password is incorrect.")
 	}  
-	fmt.Println(t.checkUserPrivKey(stub,args))
-	return t.checkUserPrivKey(stub,args), nil
+	check, err := t.checkUserPrivKey(stub,args)
+	fmt.Println(check)
+	if err!=nil {
+		return false, err
+	}
+	return check, nil
 }
 func (t *DNSChaincode) getDomainName(stub *shim.ChaincodeStub, args []string) (string, error) {
 	ipAddress := args[0]
@@ -262,7 +271,11 @@ func (t *DNSChaincode) getIPAddress(stub *shim.ChaincodeStub, args []string) (st
 }
 func (t *DNSChaincode) getOwnedDomains(stub *shim.ChaincodeStub, args []string) (string, error) {
 	userEmail := args[0]
-	if !t.checkUserPrivKey(stub,args) {
+	check, err := t.checkUserPrivKey(stub,args)
+	if err!= nil {
+		return "",err
+	}
+	if !check {
 		return "",errors.New("User private key can not be verified")
 	}
 	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
@@ -274,7 +287,11 @@ func (t *DNSChaincode) getOwnedDomains(stub *shim.ChaincodeStub, args []string) 
 }
 func (t *DNSChaincode) getOwnedBids(stub *shim.ChaincodeStub, args []string) (string, error) {
 	userEmail := args[0]
-	if !t.checkUserPrivKey(stub,args) {
+	check, err := t.checkUserPrivKey(stub,args)
+	if err!= nil {
+		return "",err
+	}
+	if !check {
 		return "",errors.New("User private key can not be verified")
 	}
 	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
@@ -286,7 +303,11 @@ func (t *DNSChaincode) getOwnedBids(stub *shim.ChaincodeStub, args []string) (st
 }
 func (t *DNSChaincode) getTransferRequests(stub *shim.ChaincodeStub, args []string) (string, error) {
 	userEmail := args[0]
-	if !t.checkUserPrivKey(stub,args) {
+	check, err := t.checkUserPrivKey(stub,args)
+	if err!= nil {
+		return "",err
+	}
+	if !check {
 		return "",errors.New("User private key can not be verified")
 	}
 	userRow, userErr := stub.GetRow("RegisteredUsers", []shim.Column{{Value: &shim.Column_String_{String_: userEmail}}})
