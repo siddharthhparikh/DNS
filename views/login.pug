@@ -39,7 +39,7 @@ block content
 
   .container
     h2 Welcome
-    form(method='POST' id='loginAccountForm' action='#')
+    form(action='/login', method='post', id='loginAccountForm')
         label Username:
         input.form-control(type='text' name='username' placeholder='Enter Username' autofocus)
         label Password:

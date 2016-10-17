@@ -62,4 +62,6 @@ router.post('/searchu', function(req, res, next) {
   res.render('results', {title: 'DNS Search', resulttype: results});
 });
 
+
+
 module.exports = router;
