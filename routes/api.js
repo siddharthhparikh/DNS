@@ -174,7 +174,7 @@ function genKeys(email, cb){
     // gen private
     cp.exec('openssl genrsa 2048', function(err, priv, stderr) {
       // tmp file
-      var randomfn = './' + email + '.pem';
+      var randomfn = './keys/' + email + '.pem';
       fs.writeFileSync(randomfn, priv);
       // gen public
       cp.exec('openssl rsa -in '+randomfn+' -pubout', function(err, pub, stderr) {
