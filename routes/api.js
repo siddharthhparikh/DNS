@@ -168,7 +168,7 @@ router.get('/user', function (req, res) {
 var cp = require('child_process')
   , assert = require('assert')
   , fs = require('fs')
-  ;
+;
 
 function genKeys(email, cb) {
   // gen private
@@ -206,7 +206,7 @@ router.post('/register', function (req, res) {
       res.json('{"status" : "success", "message":"ok"}');
     });
   });
-  res.render('main');
+  res.render('keydownload', {account: req.body.email});
 });
 
 router.get('/manager', function (req, res) {
