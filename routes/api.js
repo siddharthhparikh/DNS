@@ -9,8 +9,9 @@ var express = require('express');
 var router = express.Router();
 var session = require('express-session');
 var chaincode = require('../libs/blockchainSDK');
-var mail = require('../libs/mail')
-var cryptico = require('cryptico')
+var mail = require('../libs/mail');
+var cryptico = require('cryptico');
+var mkdirp = require('mkdirp');
 
 /* Login in request. */
 router.post('/login', function (req, res, next) {
@@ -89,7 +90,6 @@ router.get('/get-topics', function (req, res) {
 });
 
 /* Get specific voting topic from blockchain */
-
 router.get('/get-topic', function (req, res) {
   console.log('Getting topic...');
   var args = [];
@@ -170,26 +170,29 @@ var cp = require('child_process')
   , fs = require('fs')
   ;
 
-function genKeys(email, cb){
-    // gen private
-    cp.exec('openssl genrsa 2048', function(err, priv, stderr) {
-      // tmp file
-      var randomfn = './' + email + '.pem';
+function genKeys(email, cb) {
+  // gen private
+  cp.exec('openssl genrsa 2048', function (err, priv, stderr) {
+    // tmp file
+    mkdirp('./keys/', function (err) {
+      var randomfn = './keys/' + email + '.pem';
       fs.writeFileSync(randomfn, priv);
       // gen public
-      cp.exec('openssl rsa -in '+randomfn+' -pubout', function(err, pub, stderr) {
-           // delete tmp file
-           //fs.unlinkSync(randomfn);
-           // callback
-           cb({public: pub, private: priv});
+      cp.exec('openssl rsa -in ' + randomfn + ' -pubout', function (err, pub, stderr) {
+        // delete tmp file
+        //fs.unlinkSync(randomfn);
+        // callback
+        cb({ public: pub, private: priv });
       });
     });
+
+  });
 }
 router.post('/register', function (req, res) {
   console.log(req.body);
   genKeys(req.body.email, function (keys) {
     console.log(keys.public)
-    chaincode.invoke('createAccount', [req.body.email,"", keys.public, req.body.password], function (err, results) {
+    chaincode.invoke('createAccount', [req.body.email, "", keys.public, req.body.password], function (err, results) {
       if (err != null) {
         res.json('{"status" : "failure", "Error": err}');
       }
@@ -203,6 +206,7 @@ router.post('/register', function (req, res) {
       res.json('{"status" : "success", "message":"ok"}');
     });
   });
+  res.render('main');
 });
 
 router.get('/manager', function (req, res) {
