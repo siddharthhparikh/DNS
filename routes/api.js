@@ -26,22 +26,23 @@ router.post('/login', function (req, res, next) {
   var args = [username, "", password];
   console.log(args)
   chaincode.query("checkAccount", args, function (err, data) {
-    console.log("[ERROR]", err)
+    //console.log("[ERROR]", err)
     if (err != null) {
-      console.log(err);
-      res.end('{"status" : err}');
-    }
-
-    console.log(user);
-    req.session.name = user.account_id;
-    console.log('Logging in as.....');
-    console.log(req.session.name);
-    //Send response.
-    if (username.indexOf('manager') > -1) {
-      res.end('{"status" : "success", "type": "manager", "message": "ok"}');
+      console.log(err.msg);
+      res.end('{"status" : "ERROR: Check server logs"}');
     }
     else {
-      res.end('{"status" : "success", "type": "user", "message": "ok"}');
+      console.log(user);
+      req.session.name = user.account_id;
+      console.log('Logging in as.....');
+      console.log(req.session.name);
+      //Send response.
+      if (username.indexOf('manager') > -1) {
+        res.end('{"status" : "success", "type": "manager", "message": "ok"}');
+      }
+      else {
+        res.end('{"status" : "success", "type": "user", "message": "ok"}');
+      }
     }
   });
 });
