@@ -19,9 +19,23 @@ router.route('/keys').get(function(req, res) {
 });
 
 router.post('/keydown', function(req, res, next) {
-  var name = '123123@123.com' + '.pem';
-  var path = './keys/' + name;
-  res.download(path, name);
+  var type = req.body.download;
+  if(download = 'public') {
+    var name = '123123@123.com' + '.pem';
+    var path = './keys/' + name;
+
+  } else {
+    //TODO private key here
+  }
+  res.download(path, name, function(err) {
+    if(err) {
+      console.log('Error downloading: ', err);
+    } else {
+      console.log('Key downloaded');
+    }
+  });
+
+
 });
 
 router.route('/mydomains').get(function(req, res) {

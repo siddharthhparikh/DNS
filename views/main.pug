@@ -15,7 +15,7 @@ block content
           p.menu-bar-item Purchase a Domain
         a.menu-bar-link(href='/transfer')
           p.menu-bar-item Open a Trade
-        a.menu-bar-link(href='/search')
+        button.scroller2(value='#searches')
           p.menu-bar-item Search
         button.scroller2(value='#mydomains')
           p.menu-bar-item My Domains
@@ -29,7 +29,7 @@ block content
         span.menu-bar-item Purchase a Domain
       a(href='/transfer')
         span.menu-bar-item Open a Trade
-      a(href='/search')
+      button.scroller(value='#searches')
         span.menu-bar-item Search
       button(class='scroller' value='#mydomains')
         span.menu-bar-item My Domains
@@ -39,7 +39,7 @@ block content
         span.menu-bar-item My Account
 
     div.container(id='page1' style='height: 1000px')
-        
+      span.smooth(id='searches')
         .h1 Domain Search
         .flexsearch
         .flexsearch--wrapper
@@ -60,7 +60,7 @@ block content
             |  
             input.flexsearch--submit(type='submit', value='➜')
     div.container( style='height: 1000px')
-        li.smooth(id='mydomains')
+        span.smooth(id='mydomains')
             h2 Manage Domains
             table.dtble
                 tr
@@ -71,5 +71,5 @@ block content
                     td 192.168.0.1
         
     div.container( style='height: 1000px')
-        li.smooth(id='myaccount')
+        span.smooth(id='myaccount')
             h2 Manage Account

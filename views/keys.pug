@@ -14,7 +14,7 @@ block content
          p.menu-bar-item Purchase a Domain
        a.menu-bar-link(href='/transfer')
          p.menu-bar-item Open a Trade
-       a.menu-bar-link(href='/search')
+       a.menu-bar-link(href='/')
          p.menu-bar-item Search
        a.menu-bar-link(href='/mydomains')
          p.menu-bar-item My Domains
@@ -28,7 +28,7 @@ block content
        span.menu-bar-item Purchase a Domain
      a(href='/transfer')
        span.menu-bar-item Open a Trade
-     a(href='/search')
+     a(href='/')
        span.menu-bar-item Search
      a.menu-bar-link(href='/mydomains')
        span.menu-bar-item My Domains
@@ -41,7 +41,8 @@ block content
     h2 Key Generation
     //TODO determine the username and grab correct key
     form(action='/keydown' method='post')
-      button.btn2(style='width: 96%' type='submit') Public Key
-    button.btn2(style='width: 96%') Private Key
+      button.btn2#download(style='width: 96%' value='public' type='submit') Public Key
+    form(actoin='/keydown' method='post')
+      button.btn2#download(style='width: 96%' value='public' type='submit') Private Key
     br
     button.btn2(onclick="javascript:window.open('','_self').close();" style='width: 96%') Back to Register
