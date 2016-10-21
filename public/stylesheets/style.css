@@ -285,6 +285,11 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
 
 
 .scroller2 {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    width: 100%;
+    text-align: left;
+    padding: 0px;
+    display: block;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -292,6 +297,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
     user-select: none;
     background: #677798;
     border: none;
+    border-radius: 5px;
 }
 
 a.btn {
