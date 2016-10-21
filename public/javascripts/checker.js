@@ -143,8 +143,8 @@ $(document).ready(function () {
                         $("#createAccountForm .btn").removeAttr("disabled");
                     }
                 }).fail(function () {
-                    $("#LoginResults").text("Error: Failed to complete request");
-                    $("#loginAccountForm .btn").removeAttr("disabled");
+                    $("#CreateAccountResults").text("Error: Failed to complete request");
+                    $("#CreateAccountForm .btn").removeAttr("disabled");
                 });
             $("#createAccountForm .btn").attr("disabled", "");
         } else {
@@ -153,7 +153,38 @@ $(document).ready(function () {
         }
     });
 
+    $("#searchd").submit(function (event) {
+        event.preventDefault();
 
+        console.log($('#searchd input[name="lookupd"]').val())
+        if ($('#searchd input[name="lookupd"]').val().length > 0) {
+            //$("#CreateAccountResults").html("Sent Request! Waiting for response <div class=\"loading-dot\"></div><div class=\"loading-dot second\"></div><div class=\"loading-dot third\"></div>");
+            //$('#CreateAccountResults').css("visibility", "visible");
+            //sendMessage(JSON.stringify({ fcn: "register", type: "other", args: [$('#createAccountForm input[name="username"]').val()] }));
+
+            //Add check: compare password
+            $.post("/api/searchd", { domainName: $('#searchd input[name="lookupd"]').val() })
+                .done(function (data) {
+                    /*var converted = JSON.parse(data);
+                    console.log(converted)
+                    if (converted.message == "ok") {
+                        window.location.href = '/login';
+                        console.log("successful registration")
+                    } else {
+                        $("#CreateAccountResults").text("Error: Username or Email already exists");
+                        $("#createAccountForm .btn").removeAttr("disabled");
+                    }*/
+                }).fail(function () {
+                    /*$("#LoginResults").text("Error: Failed to complete request");
+                    $("#loginAccountForm .btn").removeAttr("disabled");
+                    */
+                });
+            //$("#createAccountForm .btn").attr("disabled", "");
+        } else {
+            //$('#CreateAccountResults').css("visibility", "visible");
+            //$('#CreateAccountResults').text("Error: Some fields are blank");
+        }
+    });
 
     $("#openTradeForm").submit(function (event) {
         event.preventDefault();

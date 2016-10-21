@@ -293,4 +293,15 @@ router.post('/declined', function (req, res) {
   });
 });
 
+router.post('/searchd', function (req, res) {
+  chaincode.query('getIPAddress', [req.body.domainName], function (data,err) {
+    console.log(data)
+    console.log(err)
+    /*
+      Display Buy if we get an error
+      Display IP address if IP exist. Ask to place a bid to buy the domain. 
+    */
+    res.json('{"data" : data, "Error" : err}')
+  });
+});
 module.exports = router;
