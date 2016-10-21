@@ -39,7 +39,9 @@ block content
 
   .container
     h2 Key Generation
-    button.btn2(style='width: 46%') Public Key
-    button.btn2(style='width: 46%') Private Key
+    //TODO determine the username and grab correct key
+    form(action='/keydown' method='post')
+      button.btn2(style='width: 96%' type='submit') Public Key
+    button.btn2(style='width: 96%') Private Key
     br
     button.btn2(onclick="javascript:window.open('','_self').close();" style='width: 96%') Back to Register

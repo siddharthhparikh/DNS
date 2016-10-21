@@ -18,6 +18,12 @@ router.route('/keys').get(function(req, res) {
   res.render('keys', {title: 'Register'});
 });
 
+router.post('/keydown', function(req, res, next) {
+  var name = '123123@123.com' + '.pem';
+  var path = './keys/' + name;
+  res.download(path, name);
+});
+
 router.route('/mydomains').get(function(req, res) {
   res.render('managedomains', { title: 'My Domains' });
 });
@@ -61,5 +67,7 @@ router.post('/searchu', function(req, res, next) {
   var results = 'Domain results for \"' + searchTerm + '\"';
   res.render('results', {title: 'DNS Search', resulttype: results});
 });
+
+
 
 module.exports = router;
