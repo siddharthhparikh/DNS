@@ -23,8 +23,9 @@ router.post('/login', function (req, res, next) {
 
   var username = user.username;
   var password = user.password;
+  var sign = user.sign;
   console.log("inside /login");
-  var args = [username, "", password];
+  var args = [username, sign, password];
   console.log(args)
   chaincode.query("checkAccount", args, function (err, data) {
     //console.log("[ERROR]", err)
@@ -34,16 +35,18 @@ router.post('/login', function (req, res, next) {
     }
     else {
       console.log(user);
-      req.session.name = user.account_id;
+      req.session.name = user.username;
       console.log('Logging in as.....');
       console.log(req.session.name);
       //Send response.
+      /*
       if (username.indexOf('manager') > -1) {
         res.end('{"status" : "success", "type": "manager", "message": "ok"}');
       }
       else {
         res.end('{"status" : "success", "type": "user", "message": "ok"}');
       }
+      */
     }
   });
 });
@@ -81,6 +84,7 @@ router.get('/get-account', function (req, res) {
 // });
 
 /* Get all voting topics from blockchain */
+/*
 router.get('/get-topics', function (req, res) {
   var args = [];
   args.push(req.session.name);
@@ -89,8 +93,9 @@ router.get('/get-topics', function (req, res) {
     else res.json(data);
   });
 });
-
+*/
 /* Get specific voting topic from blockchain */
+/*
 router.get('/get-topic', function (req, res) {
   console.log('Getting topic...');
   var args = [];
@@ -101,8 +106,9 @@ router.get('/get-topic', function (req, res) {
     else res.json(data);
   });
 });
-
+*/
 /* Checks the validity of the given topic */
+/*
 router.get('/topic-check', function (req, res, next) {
   // Get the topic id from the post
   var args = [];
@@ -116,8 +122,9 @@ router.get('/topic-check', function (req, res, next) {
     }
   });
 });
-
+*/
 /* Create a new voting topic */
+/*
 router.post('/create', function (req, res, next) {
   var newTopic = req.body;
 
@@ -134,8 +141,9 @@ router.post('/create', function (req, res, next) {
     else res.json('{"status" : "success"}');
   });
 });
-
+*/
 /* Submit votes from a user */
+/*
 router.post('/vote-submit', function (req, res, next) {
   req.body.voter = req.session.name;
 
@@ -143,8 +151,9 @@ router.post('/vote-submit', function (req, res, next) {
     res.json('{"status" : "success"}');
   })
 });
-
+*/
 /* Used to let the client know when the Chaincode is finished loading */
+/*
 router.get('/load-chain', function (req, res) {
   var args = [];
   args.push('InitState')
@@ -154,15 +163,16 @@ router.get('/load-chain', function (req, res) {
     }
   });
 });
-
+*/
 /* Get request for current user logged in */
+/*
 router.get('/user', function (req, res) {
   var user = req.session.name;
   console.log('Fetching current user: ' + user);
   var response = { 'user': user };
   res.json(response);
 });
-
+*/
 /* Regiister a user */
 
 // gen pub priv key pair

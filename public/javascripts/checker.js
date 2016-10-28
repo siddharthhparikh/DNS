@@ -99,6 +99,10 @@ $(document).ready(function () {
         if ($('#loginAccountForm input[name="username"]').val().length > 0 && $('#loginAccountForm input[name="password"]').val().length > 0) {
             $("#LoginResults").html("Sent Request! Waiting for response <div class=\"loading-dot\"></div><div class=\"loading-dot second\"></div><div class=\"loading-dot third\"></div>");
             $('#LoginResults').css("visibility", "visible");
+            /*if (!sessionStorage.sign) {
+
+                sessionStorage.sign  = 
+            }*/
             $.post("/api/login", { username: $('#loginAccountForm input[name="username"]').val(), password: $('#loginAccountForm input[name="password"]').val() })
                 .done(function (data) {
                     var converted = JSON.parse(data);
@@ -155,7 +159,7 @@ $(document).ready(function () {
 
     $("#searchd").submit(function (event) {
         event.preventDefault();
-
+        console.log("In searcd")
         console.log($('#searchd input[name="lookupd"]').val())
         if ($('#searchd input[name="lookupd"]').val().length > 0) {
             //$("#CreateAccountResults").html("Sent Request! Waiting for response <div class=\"loading-dot\"></div><div class=\"loading-dot second\"></div><div class=\"loading-dot third\"></div>");
